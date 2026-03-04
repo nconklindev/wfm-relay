@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Field, FieldLabel, FieldDescription, FieldError, FieldSet, FieldLegend } from '@/components/ui/field'
+import Select from '~/components/ui/select/Select.vue'
 
 useHead({ title: 'API Explorer — WFM Relay' })
 
@@ -115,8 +117,9 @@ async function logout() {
         <CardDescription>Choose how you want to authenticate with the WFM API.</CardDescription>
       </CardHeader>
       <CardContent>
-        <fieldset>
-          <legend class="sr-only">Authentication flow type</legend>
+
+        <FieldSet>
+          <FieldLegend class="sr-only">Authentication flow type</FieldLegend>
           <div class="grid gap-3 sm:grid-cols-2">
             <label
               :class="[
@@ -182,7 +185,7 @@ async function logout() {
               />
             </label>
           </div>
-        </fieldset>
+        </FieldSet>
       </CardContent>
     </Card>
 
@@ -206,8 +209,8 @@ async function logout() {
         <CardContent>
           <form class="space-y-6" @submit.prevent="authenticate">
             <!-- Client configuration -->
-            <fieldset class="space-y-4">
-              <legend class="text-sm font-medium">Client Configuration</legend>
+            <FieldSet class="space-y-4">
+              <FieldLegend class="text-sm font-medium">Client Configuration</FieldLegend>
               <div class="grid gap-4 sm:grid-cols-2">
                 <div class="space-y-2">
                   <Label for="client-id">Client ID</Label>
@@ -254,13 +257,13 @@ async function logout() {
                   />
                 </div>
               </div>
-            </fieldset>
+            </FieldSet>
 
             <Separator />
 
             <!-- WFM configuration -->
-            <fieldset class="space-y-4">
-              <legend class="text-sm font-medium">WFM Configuration</legend>
+            <FieldSet class="space-y-4">
+              <FieldLegend class="text-sm font-medium">WFM Configuration</FieldLegend>
 
               <div v-if="isInteractiveFlow" class="grid gap-4 sm:grid-cols-2">
                 <div class="space-y-2">
@@ -269,7 +272,7 @@ async function logout() {
                     id="wfm-username"
                     v-model="username"
                     placeholder="Enter Username"
-                    autocomplete="username"
+                    autocomplete="off"
                     required
                   />
                 </div>
@@ -282,7 +285,7 @@ async function logout() {
                       v-model="password"
                       :type="showPassword ? 'text' : 'password'"
                       placeholder="Enter Password"
-                      autocomplete="current-password"
+                      autocomplete="off"
                       class="pr-10"
                       required
                     />
@@ -309,7 +312,7 @@ async function logout() {
                   required
                 />
               </div>
-            </fieldset>
+            </FieldSet>
 
             <Separator />
 
@@ -387,7 +390,7 @@ async function logout() {
         <CardContent class="space-y-4">
           <div class="space-y-2">
             <Label for="endpoint-select">Endpoint</Label>
-            <select
+            <Select
               id="endpoint-select"
               v-model="selectedEndpointId"
               class="min-h-11 w-full cursor-pointer rounded-md border border-input bg-background px-3 py-2 text-base shadow-xs outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 md:text-sm"
