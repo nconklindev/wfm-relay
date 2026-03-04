@@ -58,6 +58,9 @@ useSeoMeta({
           accordance with your organization's policies regarding API access.
         </p>
         <p>
+          All API endpoints, request formats, and response structures exposed by this application are sourced from UKG's publicly available developer documentation at <NuxtLink to="https://developer.ukg.com" target="_blank" class="text-primary hover:text-accent">developer.ukg.com</NuxtLink>. No proprietary or non-public information is used. WFM Relay does not interact with the WFM API in any way that is not already documented and intended by UKG — it simply provides a cleaner interface for sending documented requests and reading the responses.
+        </p>
+        <p>
           <strong class="font-medium">Credentials and tokens are never stored or logged by this application.</strong>
           Authentication tokens are held only in short-lived, HTTP-only session cookies in your
           browser and are discarded when you log out or close the session.
