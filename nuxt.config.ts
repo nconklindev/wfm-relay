@@ -14,14 +14,19 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      title: "WFM Relay",
+      htmlAttrs: { lang: "en" },
       meta: [
-        { name: "description", content: "A relay for WFM" },
         { name: "viewport", content: "width=device-width, initial-scale=1" },
+        {
+          name: "description",
+          content:
+            "An unofficial API explorer for UKG Workforce Management. Authenticate and explore API endpoints without writing code.",
+        },
+        { property: "og:site_name", content: "WFM Relay" },
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary" },
+        { name: "robots", content: "index, follow" },
       ],
-      htmlAttrs: {
-        lang: "en",
-      },
     },
   },
 

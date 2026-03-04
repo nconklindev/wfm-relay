@@ -6,6 +6,9 @@ const isDark = computed(() => colorMode.value !== 'light')
 
 useHead(() => ({
   htmlAttrs: { class: isDark.value ? 'dark' : '' },
+  meta: [{
+    property: 'og:title', content: 'WFM Relay - An API proxy for UKG WFM'
+  }],
 }))
 
 function toggleColorMode() {
@@ -38,6 +41,9 @@ function toggleColorMode() {
             <ul class="m-0 flex list-none items-center gap-1 p-0">
               <li>
                 <NuxtLink to="/" active-class="text-accent" class="inline-flex items-center px-2 py-2 min-h-11">Home</NuxtLink>
+              </li>
+              <li>
+                <NuxtLink to="/guide" active-class="text-accent" class="inline-flex items-center px-2 py-2 min-h-11">Guide</NuxtLink>
               </li>
               <li>
                 <NuxtLink to="/about" active-class="text-accent" class="inline-flex items-center px-2 py-2 min-h-11">About</NuxtLink>

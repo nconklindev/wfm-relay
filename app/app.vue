@@ -1,5 +1,9 @@
 <script setup lang="ts">
-  import { Analytics } from '@vercel/analytics/next';
+import { Analytics } from '@vercel/analytics/nuxt'
+
+useHeadSafe({
+  titleTemplate: (chunk) => chunk ? `${chunk} — WFM Relay` : 'WFM Relay',
+})
 </script>
 
 

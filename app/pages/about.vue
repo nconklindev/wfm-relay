@@ -2,7 +2,14 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ExternalLink } from 'lucide-vue-next'
 
-useHead({ title: 'About — WFM Relay' })
+useSeoMeta({
+  title: 'About',
+  description: 'WFM Relay is an unofficial, community-built API explorer for UKG Workforce Management. Not affiliated with or endorsed by UKG.',
+  ogTitle: 'About — WFM Relay',
+  ogDescription: 'WFM Relay is an unofficial, community-built API explorer for UKG Workforce Management. Not affiliated with or endorsed by UKG.',
+  twitterTitle: 'About — WFM Relay',
+  twitterDescription: 'WFM Relay is an unofficial, community-built API explorer for UKG Workforce Management. Not affiliated with or endorsed by UKG.',
+})
 </script>
 
 <template>

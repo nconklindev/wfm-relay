@@ -6,11 +6,18 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Field, FieldLabel, FieldDescription, FieldError, FieldSet, FieldLegend } from '@/components/ui/field'
+import { Field, FieldLabel, FieldError, FieldSet, FieldLegend } from '@/components/ui/field'
 import Select from '~/components/ui/select/Select.vue'
 import { SelectGroup, SelectTrigger, SelectContent, SelectItem, SelectValue, SelectLabel } from '~/components/ui/select'
 
-useHead({ title: 'API Explorer — WFM Relay' })
+useSeoMeta({
+  title: 'API Explorer',
+  description: 'Authenticate against your UKG WFM environment and interactively explore API endpoints — no code required.',
+  ogTitle: 'API Explorer — WFM Relay',
+  ogDescription: 'Authenticate against your UKG WFM environment and interactively explore API endpoints — no code required.',
+  twitterTitle: 'API Explorer — WFM Relay',
+  twitterDescription: 'Authenticate against your UKG WFM environment and interactively explore API endpoints — no code required.',
+})
 
 const { endpoints, authenticate: wfmAuthenticate, logout: wfmLogout } = useWfm()
 
@@ -34,6 +41,13 @@ const selectedEndpointId = ref<WfmEndpointId | ''>('')
 // ---- Computed ----
 const isInteractiveFlow = computed(() => flowType.value === 'interactive')
 const orgRealmLabel = computed(() => flowType.value === 'interactive' ? 'Organization ID' : 'Realm ID')
+
+const hostnameError = computed(() => {
+  if (!hostname.value) return null
+  if (!hostname.value.startsWith('https://')) return 'Must start with https://'
+  if (hostname.value.endsWith('/')) return 'Remove the trailing slash'
+  return null
+})
 
 const canAuthenticate = computed(() => {
   if (!flowType.value || !clientId.value || !clientSecret.value || !orgRealmId.value || !hostname.value) return false
@@ -213,8 +227,8 @@ async function logout() {
             <FieldSet class="space-y-4">
               <FieldLegend class="text-sm font-medium">Client Configuration</FieldLegend>
               <div class="grid gap-4 sm:grid-cols-2">
-                <div class="space-y-2">
-                  <Label for="client-id">Client ID</Label>
+                <Field>
+                  <FieldLabel for="client-id">Client ID</FieldLabel>
                   <Input
                     id="client-id"
                     v-model="clientId"
@@ -222,10 +236,10 @@ async function logout() {
                     autocomplete="off"
                     required
                   />
-                </div>
+                </Field>
 
-                <div class="space-y-2">
-                  <Label for="client-secret">Client Secret</Label>
+                <Field>
+                  <FieldLabel for="client-secret">Client Secret</FieldLabel>
                   <div class="relative">
                     <Input
                       id="client-secret"
@@ -245,10 +259,10 @@ async function logout() {
                       <component :is="showClientSecret ? EyeOff : Eye" class="h-4 w-4" aria-hidden="true" />
                     </button>
                   </div>
-                </div>
+                </Field>
 
-                <div class="space-y-2 sm:col-span-2">
-                  <Label for="org-realm-id">{{ orgRealmLabel }}</Label>
+                <Field class="sm:col-span-2">
+                  <FieldLabel for="org-realm-id">{{ orgRealmLabel }}</FieldLabel>
                   <Input
                     id="org-realm-id"
                     v-model="orgRealmId"
@@ -256,7 +270,7 @@ async function logout() {
                     autocomplete="off"
                     required
                   />
-                </div>
+                </Field>
               </div>
             </FieldSet>
 
@@ -267,8 +281,8 @@ async function logout() {
               <FieldLegend class="text-sm font-medium">WFM Configuration</FieldLegend>
 
               <div v-if="isInteractiveFlow" class="grid gap-4 sm:grid-cols-2">
-                <div class="space-y-2">
-                  <Label for="wfm-username">Username</Label>
+                <Field>
+                  <FieldLabel for="wfm-username">Username</FieldLabel>
                   <Input
                     id="wfm-username"
                     v-model="username"
@@ -276,10 +290,10 @@ async function logout() {
                     autocomplete="off"
                     required
                   />
-                </div>
+                </Field>
 
-                <div class="space-y-2">
-                  <Label for="wfm-password">Password</Label>
+                <Field>
+                  <FieldLabel for="wfm-password">Password</FieldLabel>
                   <div class="relative">
                     <Input
                       id="wfm-password"
@@ -299,11 +313,11 @@ async function logout() {
                       <component :is="showPassword ? EyeOff : Eye" class="h-4 w-4" aria-hidden="true" />
                     </button>
                   </div>
-                </div>
+                </Field>
               </div>
 
-              <div class="space-y-2">
-                <Label for="hostname">Hostname</Label>
+              <Field :data-invalid="!!hostnameError || undefined">
+                <FieldLabel for="hostname">Hostname</FieldLabel>
                 <Input
                   id="hostname"
                   v-model="hostname"
@@ -312,7 +326,8 @@ async function logout() {
                   autocomplete="off"
                   required
                 />
-              </div>
+                <FieldError v-if="hostnameError">{{ hostnameError }}</FieldError>
+              </Field>
             </FieldSet>
 
             <Separator />

@@ -8,7 +8,11 @@ const props = defineProps<{ error: NuxtError }>()
 const colorMode = useCookie('wfm-color-mode', { default: () => 'dark' })
 useHead(() => ({
   htmlAttrs: { class: colorMode.value !== 'light' ? 'dark' : '' },
+  meta: [{ name: 'robots', content: 'noindex' }],
 }))
+useSeoMeta({
+  title: computed(() => errorConfig.value.title),
+})
 
 const statusCode = computed(() => Number(props.error.status) || 500)
 
