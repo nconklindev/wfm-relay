@@ -39,7 +39,7 @@ export default defineNuxtConfig({
   vite: {
     plugins: [tailwindcss() as any],
   },
-  modules: ["shadcn-nuxt"],
+  modules: ["shadcn-nuxt", "nuxt-security"],
   shadcn: {
     /**
      * Prefix for all the imported component.
