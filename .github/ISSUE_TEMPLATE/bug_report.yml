@@ -1,0 +1,87 @@
+name: Bug Report
+description: Report something that isn't working correctly.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug. Please fill out the fields below so we can understand and reproduce the issue.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: A clear description of the bug. What did you expect to happen, and what happened instead?
+      placeholder: "When I click Execute on the Pay Rules endpoint, I see an error instead of results..."
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Which area of the app is affected?
+      options:
+        - Authentication
+        - Endpoint selection
+        - Executing a request
+        - Results table
+        - Raw JSON output
+        - Pay Rules display
+        - Adjustment Rules display
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: endpoint
+    attributes:
+      label: Which endpoint were you using? (if applicable)
+      description: e.g. "Pay Rules", "Persons (Paginated)", "Locations"
+      placeholder: Pay Rules
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Walk us through exactly what you did before the bug occurred.
+      placeholder: |
+        1. Authenticate using interactive flow
+        2. Select "Pay Rules" from the endpoint list
+        3. Click "Execute Request"
+        4. See error
+    validations:
+      required: true
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: WFM environment type
+      description: Which type of WFM environment were you connected to?
+      options:
+        - Production
+        - Evaluation (CFN)
+        - Unknown
+    validations:
+      required: true
+
+  - type: dropdown
+    id: auth-flow
+    attributes:
+      label: Authentication flow used
+      options:
+        - Interactive (username + password)
+        - Non-interactive (client credentials)
+        - Not applicable / not yet authenticated
+
+  - type: input
+    id: browser
+    attributes:
+      label: Browser
+      placeholder: "Chrome 124, Firefox 126, Safari 17..."
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Anything else?
+      description: Screenshots, error messages from the browser console, or any other context that might help.

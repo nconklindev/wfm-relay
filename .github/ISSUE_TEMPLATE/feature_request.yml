@@ -1,0 +1,59 @@
+name: Feature Request
+description: Suggest a new endpoint, improvement, or idea.
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Have an idea that would make WFM Relay more useful? We'd love to hear it.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: Describe the situation or limitation that prompted this request.
+      placeholder: "I often need to look up accrual policy configurations, but there's no endpoint for it in the tool..."
+    validations:
+      required: true
+
+  - type: dropdown
+    id: type
+    attributes:
+      label: What kind of request is this?
+      options:
+        - Add a new WFM endpoint
+        - Improve an existing endpoint's display
+        - UI / usability improvement
+        - Export or download results
+        - Authentication improvement
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: endpoint
+    attributes:
+      label: WFM API endpoint (if applicable)
+      description: If you're requesting a new endpoint, paste the API path here.
+      placeholder: "api/v1/timekeeping/setup/accrual_policies"
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: What would you like to see?
+      description: Describe the feature or change as clearly as you can. Mockups, examples, or links to WFM API docs are welcome.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Have you tried any workarounds?
+      description: Anything you're doing today to get around the limitation, even if it's using a different tool entirely.
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Anything else?
+      description: Additional context, related requests, or anything else that might be helpful.
