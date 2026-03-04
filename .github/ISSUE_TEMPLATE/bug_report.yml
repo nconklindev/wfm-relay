@@ -59,7 +59,8 @@ body:
       label: WFM environment type
       description: Which type of WFM environment were you connected to?
       options:
-        - Production
+        - Production (PRD)
+        - Non-Production (NPR/UAT/TST/DEV)
         - Evaluation (CFN)
         - Unknown
     validations:
