@@ -1,75 +1,49 @@
-# Nuxt Minimal Starter
+# WFM Relay
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+An unofficial, community-built API explorer for UKG Workforce Management.
 
-## Setup
+WFM Relay lets you authenticate against a WFM environment and interactively explore its API endpoints — without writing code or configuring a REST client. Built for administrators, implementers, support engineers, and anyone who regularly works with WFM data.
 
-Make sure to install dependencies:
+> **Not affiliated with or endorsed by UKG.** See [Disclaimer](#disclaimer).
 
-```bash
-# npm
-npm install
+---
 
-# pnpm
-pnpm install
+## Features
 
-# yarn
-yarn install
+- **Interactive and non-interactive authentication** — supports both password-realm and client credentials OAuth flows
+- **14+ WFM API endpoints** across five categories: Common Resources, People, Labor Categories, Timekeeping, and Platform
+- **Sortable, searchable, paginated results table** — with smart formatting for nested data
+- **Dedicated displays** for complex responses like Pay Rules and Adjustment Rules (expandable effective-dated versions)
+- **Raw JSON output** with one-click copy
+- **Mobile-friendly** — works on any screen size
+- **Light and dark mode**
 
-# bun
-bun install
-```
+---
 
-## Development Server
+## Using the App
 
-Start the development server on `http://localhost:3000`:
+New to WFM Relay? Start with the **[User Guide](/guide)** — it covers everything from getting your credentials to reading the results, with no technical knowledge assumed.
 
-```bash
-# npm
-npm run dev
+---
 
-# pnpm
-pnpm dev
+## Contributing
 
-# yarn
-yarn dev
+Bug reports and feature requests are welcome — please use the [issue templates](.github/ISSUE_TEMPLATE/) on GitHub.
 
-# bun
-bun run dev
-```
+For code contributions:
 
-## Production
+1. Fork the repo and create a branch from `main`
+2. Make your changes
+3. Open a pull request with a clear description of what changed and why
 
-Build the application for production:
+Please keep pull requests focused — one feature or fix per PR.
 
-```bash
-# npm
-npm run build
+---
 
-# pnpm
-pnpm build
+## Disclaimer
 
-# yarn
-yarn build
+WFM Relay is not affiliated with, endorsed by, or supported by UKG or any of its subsidiaries. It is provided as-is with no warranty of any kind. Use it in accordance with your organization's policies regarding API access.
 
-# bun
-bun run build
-```
+All API endpoints, request formats, and response structures exposed by this application are sourced from UKG's publicly available developer documentation at [developer.ukg.com](https://developer.ukg.com). No proprietary or non-public information is used. WFM Relay does not interact with the WFM API in any way that is not already documented and intended by UKG — it simply provides a cleaner interface for sending documented requests and reading the responses.
 
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+Credentials and tokens are never stored or logged by this application. Authentication tokens are held only in short-lived, HTTP-only session cookies in your browser.
