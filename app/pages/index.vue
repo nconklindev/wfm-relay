@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Field, FieldLabel, FieldDescription, FieldError, FieldSet, FieldLegend } from '@/components/ui/field'
 import Select from '~/components/ui/select/Select.vue'
+import { SelectGroup, SelectTrigger, SelectContent, SelectItem, SelectValue, SelectLabel } from '~/components/ui/select'
 
 useHead({ title: 'API Explorer — WFM Relay' })
 
@@ -388,23 +389,25 @@ async function logout() {
           <CardDescription>Select an endpoint to inspect and test.</CardDescription>
         </CardHeader>
         <CardContent class="space-y-4">
-          <div class="space-y-2">
+          <div class="space-y-2 w-full">
             <Label for="endpoint-select">Endpoint</Label>
             <Select
               id="endpoint-select"
               v-model="selectedEndpointId"
-              class="min-h-11 w-full cursor-pointer rounded-md border border-input bg-background px-3 py-2 text-base shadow-xs outline-none transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 md:text-sm"
               aria-label="Select an API endpoint"
             >
-              <option value="">
-                Select an endpoint…
-              </option>
-              <optgroup v-for="category in endpointCategories" :key="category.label" :label="category.label">
-                <option v-for="endpoint in category.endpoints" :key="endpoint.id" :value="endpoint.id">
-                  [{{ endpoint.method }}] {{ endpoint.path }}
-                </option>
-              </optgroup>
-            </select>
+              <SelectTrigger class="min-w-1/2">
+                <SelectValue placeholder="Select an endpoint" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup v-for="category in endpointCategories" :key="category.label" :label="category.label">
+                  <component :is="SelectLabel">{{ category.label }}</component>
+                  <component :is="SelectItem" v-for="endpoint in category.endpoints" :key="endpoint.id" :value="endpoint.id">
+                    [{{ endpoint.method }}] {{ endpoint.path }}
+                  </component>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
           </div>
 
           <!-- Endpoint detail / results area -->
