@@ -31,6 +31,11 @@ export interface WfmEndpointDef {
   notes?: string[]
   /** Declarative input fields rendered generically by EndpointPanel. */
   inputs?: WfmInputDef[]
+  /**
+   * Body sent automatically when the user clicks Execute and no inputs are filled.
+   * Lets POST endpoints work out-of-the-box without exposing JSON to the user.
+   */
+  defaultBody?: unknown
 }
 
 /**
@@ -130,13 +135,15 @@ export const ENDPOINT_DEFS = [
     label: 'Persons (Paginated)',
     method: 'POST',
     path: 'api/v1/commons/persons/apply_read',
-    description: 'Retrieve person records with pagination support.',
+    description: 'Retrieve the most detailed person records available.',
     category: 'People',
     notes: [
-      'Retrieves all persons in the system.',
+      'Returns the most detailed person response supported by this endpoint.',
+      'Retrieves up to 1,000 records per request.',
       'The associated access control point is LIGHT_WEIGHT_EMPLOYEE_RECORDS_READ.',
       'Review the table for at-a-glance information or the raw JSON for additional details.',
     ],
+    defaultBody: { where: {}, index: 0, count: 1000 },
   },
 
   // ── Labor Categories ──────────────────────────────────────────────

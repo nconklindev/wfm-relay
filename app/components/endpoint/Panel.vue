@@ -91,9 +91,13 @@ async function executeRequest() {
   error.value = ''
   response.value = null
   try {
-    const body = hasCustomInput.value
-      ? (Object.keys(customData.value).length ? customData.value : undefined)
-      : buildGenericBody()
+    let body: unknown
+    if (hasCustomInput.value) {
+      body = Object.keys(customData.value).length ? customData.value : undefined
+    }
+    else {
+      body = buildGenericBody() ?? props.endpoint.defaultBody
+    }
     response.value = await call(props.endpoint.id as WfmEndpointId, body)
   }
   catch (err) {
