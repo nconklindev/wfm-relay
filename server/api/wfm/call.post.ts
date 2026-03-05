@@ -38,6 +38,7 @@ export default defineEventHandler(async (event) => {
     if (!isNaN(total) && total > first.records.length) {
       const fetched = first.records.length
       const remainingPages = Math.ceil((total - fetched) / count)
+      console.log(`[wfm-relay] Auto-paginating: ${total} total, ${fetched} fetched, ${remainingPages} more page(s)`);
 
       const pages = await Promise.all(
         Array.from({ length: remainingPages }, (_, i) =>
