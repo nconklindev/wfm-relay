@@ -15,6 +15,7 @@ WFM Relay lets you authenticate against a WFM environment and interactively expl
 - **Sortable, searchable, paginated results table** — with smart formatting for nested data
 - **Dedicated displays** for complex responses like Pay Rules and Adjustment Rules (expandable effective-dated versions)
 - **Raw JSON output** with one-click copy
+- **CSV Export** for select endpoints
 - **Mobile-friendly** — works on any screen size
 - **Light and dark mode**
 
