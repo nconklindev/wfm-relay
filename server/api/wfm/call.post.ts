@@ -24,38 +24,31 @@ export default defineEventHandler(async (event) => {
 
   const first = await callWfmApi(token, hostname, body.method, body.path, body.data) as Record<string, unknown>
 
-  // Auto-paginate for any response shaped { records: [...], totalElements: "N" }
-  if (
-    first
-    && typeof first === 'object'
-    && Array.isArray(first.records)
-    && 'totalElements' in first
-  ) {
-    const total = parseInt(String(first.totalElements), 10)
+  // Auto-paginate for responses shaped { records: [...] }.
+  // totalElements is per-page only, so we fetch sequentially until a short page signals the end.
+  if (first && typeof first === 'object' && Array.isArray(first.records)) {
     const requestData = (body.data ?? {}) as Record<string, unknown>
     const count = (requestData.count as number) ?? 1000
 
-    if (!isNaN(total) && total > first.records.length) {
-      const fetched = first.records.length
-      const remainingPages = Math.ceil((total - fetched) / count)
-      console.log(`[wfm-relay] Auto-paginating: ${total} total, ${fetched} fetched, ${remainingPages} more page(s)`);
+    if (first.records.length === count) {
+      const allRecords: unknown[] = [...first.records]
+      let index = count
 
-      const pages = await Promise.all(
-        Array.from({ length: remainingPages }, (_, i) =>
-          callWfmApi(token, hostname, body.method, body.path, {
-            ...requestData,
-            index: fetched + i * count,
-            count,
-          }) as Promise<Record<string, unknown>>,
-        ),
-      )
+      while (true) {
+        const page = await callWfmApi(token, hostname, body.method, body.path, {
+          ...requestData,
+          index,
+          count,
+        }) as Record<string, unknown>
 
-      const allRecords = [
-        ...first.records,
-        ...pages.flatMap(p => Array.isArray(p.records) ? p.records : []),
-      ]
+        const pageRecords = Array.isArray(page.records) ? page.records : []
+        allRecords.push(...pageRecords)
 
-      return { ...first, records: allRecords, totalElements: String(allRecords.length) }
+        if (pageRecords.length < count) break
+        index += count
+      }
+
+      return { ...first, records: allRecords }
     }
   }
 

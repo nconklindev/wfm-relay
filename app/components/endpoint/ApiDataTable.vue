@@ -110,7 +110,8 @@ const search = ref('')
 const sortField = ref('')
 const sortDirection = ref<'asc' | 'desc'>('asc')
 const currentPage = ref(1)
-const perPage = 25
+const perPage = ref(25)
+const pageSizeOptions = [25, 50, 100]
 
 // ── Derived ────────────────────────────────────────────────────────────────
 
@@ -141,14 +142,14 @@ const sorted = computed(() => {
 })
 
 const totalRecords = computed(() => filtered.value.length)
-const totalPages = computed(() => Math.ceil(totalRecords.value / perPage))
+const totalPages = computed(() => Math.ceil(totalRecords.value / perPage.value))
 const paginated = computed(() => {
-  const start = (currentPage.value - 1) * perPage
-  return sorted.value.slice(start, start + perPage)
+  const start = (currentPage.value - 1) * perPage.value
+  return sorted.value.slice(start, start + perPage.value)
 })
 
-// Reset page when search or sort changes
-watch([search, sortField, sortDirection], () => { currentPage.value = 1 })
+// Reset page when search, sort, or page size changes
+watch([search, sortField, sortDirection, perPage], () => { currentPage.value = 1 })
 
 // ── Actions ────────────────────────────────────────────────────────────────
 
@@ -202,16 +203,25 @@ function exportCSV() {
           (filtered from {{ rows.length.toLocaleString() }})
         </template>
       </p>
-      <Button
-        variant="outline"
-        size="sm"
-        class="w-full sm:w-auto"
-        :disabled="sorted.length === 0"
-        @click="exportCSV"
-      >
-        <Download class="h-3.5 w-3.5" aria-hidden="true" />
-        Export CSV
-      </Button>
+      <div class="flex w-full items-center gap-2 sm:w-auto">
+        <Button
+          variant="outline"
+          size="sm"
+          class="flex-1 sm:flex-none"
+          :disabled="sorted.length === 0"
+          @click="exportCSV"
+        >
+          <Download class="h-3.5 w-3.5" aria-hidden="true" />
+          Export CSV
+        </Button>
+        <select
+          v-model="perPage"
+          class="h-9 rounded-md border border-input bg-background px-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          aria-label="Rows per page"
+        >
+          <option v-for="n in pageSizeOptions" :key="n" :value="n">{{ n }} / page</option>
+        </select>
+      </div>
       <div class="relative w-full sm:w-64">
         <Search class="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
         <Input
