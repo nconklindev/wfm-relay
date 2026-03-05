@@ -39,9 +39,8 @@ useSeoMeta({
       <CardContent class="space-y-4 text-sm">
         <p>
           Before you can use WFM Relay, you need a set of API credentials for your WFM
-          environment. These are separate from your regular WFM login. Your WFM administrator
-          sets them up under <strong class="font-medium">Administration → Application Setup →
-          Developer Tools → OAuth Clients</strong>.
+          environment. These are separate from your regular WFM login. Admins can set up a new Client under <strong class="font-medium">Administration → Application Setup →
+          Common Setup → Client Management</strong>.
         </p>
 
         <div class="space-y-3">
