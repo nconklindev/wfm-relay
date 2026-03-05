@@ -91,7 +91,7 @@ function goHome() {
 
     <p
       v-if="error.message && statusCode >= 500"
-      class="mt-8 max-w-[280px] sm:max-w-sm truncate font-mono text-xs text-muted-foreground"
+      class="mt-8 max-w-70 sm:max-w-sm truncate font-mono text-xs text-muted-foreground"
       :title="error.message"
     >
       {{ error.message }}
