@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { WfmEndpointDef, WfmEndpointId, WfmFlow } from '@/composables/useWfm'
-import { Eye, EyeOff } from 'lucide-vue-next'
+import { ChevronDown, ChevronUp, Eye, EyeOff, RotateCcw, X } from 'lucide-vue-next'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -37,6 +37,18 @@ const hostname = ref('')
 const showClientSecret = ref(false)
 const showPassword = ref(false)
 const selectedEndpointId = ref<WfmEndpointId | ''>('')
+
+// ---- Request History ----
+const { history, removeEntry, clearHistory } = useRequestHistory()
+const historyExpanded = ref(false)
+
+function formatRelativeTime(ts: number): string {
+  const diff = Date.now() - ts
+  if (diff < 60_000) return 'just now'
+  if (diff < 3_600_000) return `${Math.floor(diff / 60_000)}m ago`
+  if (diff < 86_400_000) return `${Math.floor(diff / 3_600_000)}h ago`
+  return new Date(ts).toLocaleDateString()
+}
 
 // ---- Computed ----
 const isInteractiveFlow = computed(() => flowType.value === 'interactive')
@@ -423,6 +435,83 @@ async function logout() {
                 </SelectGroup>
               </SelectContent>
             </Select>
+          </div>
+
+          <!-- Request History -->
+          <div v-if="history.length > 0" class="rounded-lg border">
+            <button
+              type="button"
+              class="flex w-full items-center justify-between px-4 py-3 min-h-11 text-sm font-medium transition-colors hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset"
+              :aria-expanded="historyExpanded"
+              aria-controls="request-history-panel"
+              @click="historyExpanded = !historyExpanded"
+            >
+              <span>Recent Requests ({{ history.length }})</span>
+              <ChevronUp v-if="historyExpanded" class="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+              <ChevronDown v-else class="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+            </button>
+
+            <div v-if="historyExpanded" id="request-history-panel" class="border-t">
+              <ul class="divide-y" role="list" aria-label="Request history entries">
+                <li
+                  v-for="entry in history"
+                  :key="entry.id"
+                  class="flex flex-col gap-2 px-4 py-3 sm:flex-row sm:items-center sm:gap-3"
+                >
+                  <!-- Entry info -->
+                  <div class="flex flex-1 flex-wrap items-center gap-x-2.5 gap-y-1 min-w-0">
+                    <span class="text-sm font-medium truncate">{{ entry.endpointLabel }}</span>
+                    <span
+                      :class="[
+                        'inline-flex items-center rounded px-1.5 py-0.5 text-xs font-mono font-semibold shrink-0',
+                        entry.method === 'GET'
+                          ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
+                          : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400',
+                      ]"
+                    >
+                      {{ entry.method }}
+                    </span>
+                    <span class="text-xs text-muted-foreground">{{ formatRelativeTime(entry.timestamp) }}</span>
+                    <span v-if="entry.resultCount !== null" class="text-xs text-muted-foreground">
+                      {{ entry.resultCount.toLocaleString() }} record{{ entry.resultCount === 1 ? '' : 's' }}
+                    </span>
+                  </div>
+
+                  <!-- Actions -->
+                  <div class="flex items-center gap-2 shrink-0">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      class="min-h-11 sm:min-h-8"
+                      @click="selectedEndpointId = entry.endpointId as WfmEndpointId"
+                    >
+                      <RotateCcw class="h-3.5 w-3.5" aria-hidden="true" />
+                      Reload
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon-sm"
+                      class="min-h-11 min-w-11 sm:min-h-8 sm:min-w-8"
+                      :aria-label="`Remove ${entry.endpointLabel} from history`"
+                      @click="removeEntry(entry.id)"
+                    >
+                      <X class="h-3.5 w-3.5" aria-hidden="true" />
+                    </Button>
+                  </div>
+                </li>
+              </ul>
+
+              <div class="border-t px-4 py-3">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  class="w-full sm:w-auto min-h-11 sm:min-h-8"
+                  @click="clearHistory"
+                >
+                  Clear all
+                </Button>
+              </div>
+            </div>
           </div>
 
           <!-- Endpoint detail / results area -->

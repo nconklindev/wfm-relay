@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ChevronDown, ChevronUp, ChevronsUpDown, Search } from 'lucide-vue-next'
+import { ChevronDown, ChevronUp, ChevronsUpDown, Download, Search } from 'lucide-vue-next'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
 const props = defineProps<{ response: unknown }>()
@@ -160,6 +161,35 @@ function toggleSort(col: string) {
     sortDirection.value = 'asc'
   }
 }
+
+function exportCSV() {
+  const cols = columns.value
+  const data = sorted.value
+  if (!cols.length || !data.length) return
+
+  function escapeCSV(value: string): string {
+    if (value.includes(',') || value.includes('"') || value.includes('\n')) {
+      return `"${value.replace(/"/g, '""')}"`
+    }
+    return value
+  }
+
+  const header = cols.map(escapeCSV).join(',')
+  const body = data.map(row =>
+    cols.map(col => escapeCSV(formatCell(row[col]))).join(','),
+  ).join('\n')
+
+  const csv = `${header}\n${body}`
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = url
+  link.download = `wfm-export-${Date.now()}.csv`
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+  URL.revokeObjectURL(url)
+}
 </script>
 
 <template>
@@ -172,6 +202,16 @@ function toggleSort(col: string) {
           (filtered from {{ rows.length.toLocaleString() }})
         </template>
       </p>
+      <Button
+        variant="outline"
+        size="sm"
+        class="w-full sm:w-auto"
+        :disabled="sorted.length === 0"
+        @click="exportCSV"
+      >
+        <Download class="h-3.5 w-3.5" aria-hidden="true" />
+        Export CSV
+      </Button>
       <div class="relative w-full sm:w-64">
         <Search class="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
         <Input

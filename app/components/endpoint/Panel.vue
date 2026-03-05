@@ -37,6 +37,32 @@ const props = defineProps<{
 }>()
 
 const { call } = useWfm()
+const { addEntry } = useRequestHistory()
+
+// ── Helpers ────────────────────────────────────────────────────────────────
+
+/**
+ * Extract a record count from the response using the same candidate keys
+ * as ApiDataTable's `extractRows`. Returns `null` when the count cannot be
+ * determined.
+ */
+function countResults(res: unknown): number | null {
+  if (Array.isArray(res)) return res.length
+  if (typeof res !== 'object' || res === null) return null
+
+  const obj = res as Record<string, unknown>
+  const candidates = ['data', 'items', 'coreProperties', 'results', 'records', 'employees', 'locations']
+  for (const key of candidates) {
+    if (Array.isArray(obj[key])) return (obj[key] as unknown[]).length
+  }
+  // Fallback: first array-valued key containing objects
+  for (const val of Object.values(obj)) {
+    if (Array.isArray(val) && val.length > 0 && typeof val[0] === 'object' && val[0] !== null) {
+      return val.length
+    }
+  }
+  return null
+}
 
 // ── State ──────────────────────────────────────────────────────────────────
 
@@ -99,6 +125,15 @@ async function executeRequest() {
       body = buildGenericBody() ?? props.endpoint.defaultBody
     }
     response.value = await call(props.endpoint.id as WfmEndpointId, body)
+
+    const { id, label, method, path } = props.endpoint
+    addEntry({
+      endpointId: id,
+      endpointLabel: label,
+      method,
+      path,
+      resultCount: countResults(response.value),
+    })
   }
   catch (err) {
     // Error chain: Nitro wraps the upstream error as { statusMessage, data: <wfm body> }.
