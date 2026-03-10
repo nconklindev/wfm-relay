@@ -204,32 +204,21 @@ function exportCSV() {
         </template>
       </p>
       <div class="flex w-full items-center gap-2 sm:w-auto">
-        <Button
-          variant="outline"
-          size="sm"
-          class="flex-1 sm:flex-none"
-          :disabled="sorted.length === 0"
-          @click="exportCSV"
-        >
+        <Button variant="outline" size="sm" class="flex-1 sm:flex-none" :disabled="sorted.length === 0"
+          @click="exportCSV">
           <Download class="h-3.5 w-3.5" aria-hidden="true" />
           Export CSV
         </Button>
-        <select
-          v-model="perPage"
+        <select v-model="perPage"
           class="h-9 rounded-md border border-input bg-background px-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          aria-label="Rows per page"
-        >
+          aria-label="Rows per page">
           <option v-for="n in pageSizeOptions" :key="n" :value="n">{{ n }} / page</option>
         </select>
       </div>
       <div class="relative w-full sm:w-64">
-        <Search class="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
-        <Input
-          v-model="search"
-          placeholder="Search…"
-          class="pl-8 h-9 text-sm"
-          aria-label="Search results"
-        />
+        <Search class="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground"
+          aria-hidden="true" />
+        <Input v-model="search" placeholder="Search…" class="pl-8 h-9 text-sm" aria-label="Search results" />
       </div>
     </div>
 
@@ -238,33 +227,23 @@ function exportCSV() {
       <table class="w-full text-sm">
         <thead class="bg-muted/50">
           <tr>
-            <th
-              v-for="col in columns"
-              :key="col"
+            <th v-for="col in columns" :key="col"
               class="whitespace-nowrap px-3 py-2.5 text-left font-medium text-muted-foreground cursor-pointer select-none hover:text-foreground"
-              @click="toggleSort(col)"
-            >
+              @click="toggleSort(col)">
               <span class="inline-flex items-center gap-1">
                 {{ col }}
                 <ChevronUp v-if="sortField === col && sortDirection === 'asc'" class="h-3 w-3" aria-hidden="true" />
-                <ChevronDown v-else-if="sortField === col && sortDirection === 'desc'" class="h-3 w-3" aria-hidden="true" />
+                <ChevronDown v-else-if="sortField === col && sortDirection === 'desc'" class="h-3 w-3"
+                  aria-hidden="true" />
                 <ChevronsUpDown v-else class="h-3 w-3 opacity-30" aria-hidden="true" />
               </span>
             </th>
           </tr>
         </thead>
         <tbody class="divide-y">
-          <tr
-            v-for="(row, i) in paginated"
-            :key="i"
-            class="hover:bg-muted/30 transition-colors"
-          >
-            <td
-              v-for="col in columns"
-              :key="col"
-              class="max-w-xs truncate px-3 py-2 text-foreground"
-              :title="tooltipCell(row[col])"
-            >
+          <tr v-for="(row, i) in paginated" :key="i" class="hover:bg-muted/30 transition-colors">
+            <td v-for="col in columns" :key="col" class="max-w-xs truncate px-3 py-2 text-foreground"
+              :title="tooltipCell(row[col])">
               {{ formatCell(row[col]) }}
             </td>
           </tr>
@@ -273,23 +252,18 @@ function exportCSV() {
     </div>
 
     <!-- Pagination -->
-    <div v-if="totalPages > 1" class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between text-sm text-muted-foreground">
+    <div v-if="totalPages > 1"
+      class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between text-sm text-muted-foreground">
       <span>Page {{ currentPage }} of {{ totalPages }}</span>
       <div class="flex items-center gap-2">
-        <button
+        <button type="button"
           class="rounded px-3 py-2 min-h-11 hover:bg-muted disabled:opacity-40 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          :disabled="currentPage === 1"
-          aria-label="Go to previous page"
-          @click="currentPage--"
-        >
+          :disabled="currentPage === 1" aria-label="Go to previous page" @click="currentPage--">
           Previous
         </button>
-        <button
+        <button type="button"
           class="rounded px-3 py-2 min-h-11 hover:bg-muted disabled:opacity-40 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          :disabled="currentPage === totalPages"
-          aria-label="Go to next page"
-          @click="currentPage++"
-        >
+          :disabled="currentPage === totalPages" aria-label="Go to next page" @click="currentPage++">
           Next
         </button>
       </div>

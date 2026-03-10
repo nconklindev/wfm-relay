@@ -16,13 +16,23 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 401, statusMessage: 'Not authenticated' })
   }
 
-  const body = await readBody<{ method: 'GET' | 'POST'; path: string; data?: unknown }>(event)
+  const body = await readBody<{
+    method: 'GET' | 'POST'
+    path: string
+    data?: unknown
+  }>(event)
 
   if (!body.method || !body.path) {
-    throw createError({ statusCode: 400, statusMessage: 'method and path are required' })
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'method and path are required',
+    })
   }
 
-  const first = await callWfmApi(token, hostname, body.method, body.path, body.data) as Record<string, unknown>
+  const first = (await callWfmApi(token, hostname, body.method, body.path, body.data)) as Record<
+    string,
+    unknown
+  >
 
   // Auto-paginate for responses shaped { records: [...] }.
   // totalElements is per-page only, so we fetch sequentially until a short page signals the end.
@@ -35,11 +45,11 @@ export default defineEventHandler(async (event) => {
       let index = count
 
       while (true) {
-        const page = await callWfmApi(token, hostname, body.method, body.path, {
+        const page = (await callWfmApi(token, hostname, body.method, body.path, {
           ...requestData,
           index,
           count,
-        }) as Record<string, unknown>
+        })) as Record<string, unknown>
 
         const pageRecords = Array.isArray(page.records) ? page.records : []
         allRecords.push(...pageRecords)

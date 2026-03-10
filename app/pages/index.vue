@@ -74,7 +74,7 @@ const endpointCategories = computed(() => {
     if (!map.has(ep.category)) map.set(ep.category, [])
     map.get(ep.category)!.push(ep)
   }
-  return [...map.entries()].map(([label, endpoints]) => ({ label, endpoints }))
+  return [...map.entries()].map(([label, items]) => ({ label, endpoints: items }))
 })
 
 const selectedEndpoint = computed(() => endpoints.find(e => e.id === selectedEndpointId.value) ?? null)
@@ -148,68 +148,42 @@ async function logout() {
         <FieldSet>
           <FieldLegend class="sr-only">Authentication flow type</FieldLegend>
           <div class="grid gap-3 sm:grid-cols-2">
-            <label
-              :class="[
-                'relative flex cursor-pointer rounded-lg border p-4 transition-colors',
-                flowType === 'interactive'
-                  ? 'border-primary bg-primary/5'
-                  : 'border-border hover:bg-muted/50',
-              ]"
-            >
-              <input
-                type="radio"
-                name="flow-type"
-                value="interactive"
-                class="sr-only"
-                :checked="flowType === 'interactive'"
-                aria-describedby="interactive-flow-desc"
-                @change="handleFlowChange('interactive')"
-              >
-              <div class="flex flex-col gap-1">
-                <span class="text-sm font-medium">Interactive Flow</span>
-                <span id="interactive-flow-desc" class="text-xs text-muted-foreground">
-                  User-based authentication with username and password.
-                </span>
-              </div>
-              <div
-                :class="[
-                  'ml-auto mt-0.5 h-4 w-4 shrink-0 rounded-full border-2 transition-colors',
+            <label class="relative flex cursor-pointer rounded-lg border p-4 transition-colors" :class="[
+              flowType === 'interactive'
+                ? 'border-primary bg-primary/5'
+                : 'border-border hover:bg-muted/50',
+            ]">
+              <input type="radio" name="flow-type" value="interactive" class="sr-only"
+                :checked="flowType === 'interactive'" aria-describedby="interactive-flow-desc"
+                @change="handleFlowChange('interactive')">
+                <div class="flex flex-col gap-1">
+                  <span class="text-sm font-medium">Interactive Flow</span>
+                  <span id="interactive-flow-desc" class="text-xs text-muted-foreground">
+                    User-based authentication with username and password.
+                  </span>
+                </div>
+                <div class="ml-auto mt-0.5 h-4 w-4 shrink-0 rounded-full border-2 transition-colors" :class="[
                   flowType === 'interactive' ? 'border-primary bg-primary' : 'border-muted-foreground',
-                ]"
-                aria-hidden="true"
-              />
+                ]" aria-hidden="true" />
             </label>
 
-            <label
-              :class="[
-                'relative flex cursor-pointer rounded-lg border p-4 transition-colors',
-                flowType === 'non-interactive'
-                  ? 'border-primary bg-primary/5'
-                  : 'border-border hover:bg-muted/50',
-              ]"
-            >
-              <input
-                type="radio"
-                name="flow-type"
-                value="non-interactive"
-                class="sr-only"
-                :checked="flowType === 'non-interactive'"
-                aria-describedby="non-interactive-flow-desc"
-                @change="handleFlowChange('non-interactive')"
-              >
-              <div class="flex flex-col gap-1">
-                <span class="text-sm font-medium">Non-Interactive Flow</span>
-                <span id="non-interactive-flow-desc" class="text-xs text-muted-foreground">
-                  Service account authentication using a client credentials grant.
-                </span>
-              </div>
-              <div
-                :class="[
-                  'ml-auto mt-0.5 h-4 w-4 shrink-0 rounded-full border-2 transition-colors',
+            <label class="relative flex cursor-pointer rounded-lg border p-4 transition-colors" :class="[
+              flowType === 'non-interactive'
+                ? 'border-primary bg-primary/5'
+                : 'border-border hover:bg-muted/50',
+            ]">
+              <input type="radio" name="flow-type" value="non-interactive" class="sr-only"
+                :checked="flowType === 'non-interactive'" aria-describedby="non-interactive-flow-desc"
+                @change="handleFlowChange('non-interactive')">
+                <div class="flex flex-col gap-1">
+                  <span class="text-sm font-medium">Non-Interactive Flow</span>
+                  <span id="non-interactive-flow-desc" class="text-xs text-muted-foreground">
+                    Service account authentication using a client credentials grant.
+                  </span>
+                </div>
+                <div class="ml-auto mt-0.5 h-4 w-4 shrink-0 rounded-full border-2 transition-colors" :class="[
                   flowType === 'non-interactive' ? 'border-primary bg-primary' : 'border-muted-foreground',
-                ]"
-                aria-hidden="true"
-              />
+                ]" aria-hidden="true" />
             </label>
           </div>
         </FieldSet>
@@ -217,14 +191,9 @@ async function logout() {
     </Card>
 
     <!-- Step 2: Configuration (appears after flow selection) -->
-    <Transition
-      enter-active-class="transition-all duration-300 ease-out"
-      enter-from-class="opacity-0 translate-y-1"
-      enter-to-class="opacity-100 translate-y-0"
-      leave-active-class="transition-all duration-150 ease-in"
-      leave-from-class="opacity-100"
-      leave-to-class="opacity-0"
-    >
+    <Transition enter-active-class="transition-all duration-300 ease-out" enter-from-class="opacity-0 translate-y-1"
+      enter-to-class="opacity-100 translate-y-0" leave-active-class="transition-all duration-150 ease-in"
+      leave-from-class="opacity-100" leave-to-class="opacity-0">
       <Card v-if="flowType">
         <CardHeader>
           <CardTitle>Configuration</CardTitle>
@@ -241,33 +210,18 @@ async function logout() {
               <div class="grid gap-4 sm:grid-cols-2">
                 <Field>
                   <FieldLabel for="client-id">Client ID</FieldLabel>
-                  <Input
-                    id="client-id"
-                    v-model="clientId"
-                    placeholder="Enter Client ID"
-                    autocomplete="off"
-                    required
-                  />
+                  <Input id="client-id" v-model="clientId" placeholder="Enter Client ID" autocomplete="off" required />
                 </Field>
 
                 <Field>
                   <FieldLabel for="client-secret">Client Secret</FieldLabel>
                   <div class="relative">
-                    <Input
-                      id="client-secret"
-                      v-model="clientSecret"
-                      :type="showClientSecret ? 'text' : 'password'"
-                      placeholder="Enter Client Secret"
-                      autocomplete="off"
-                      class="pr-10"
-                      required
-                    />
-                    <button
-                      type="button"
+                    <Input id="client-secret" v-model="clientSecret" :type="showClientSecret ? 'text' : 'password'"
+                      placeholder="Enter Client Secret" autocomplete="off" class="pr-10" required />
+                    <button type="button"
                       class="absolute right-1 top-1/2 -translate-y-1/2 p-2 min-h-11 min-w-11 inline-flex items-center justify-center text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded"
                       :aria-label="showClientSecret ? 'Hide client secret' : 'Show client secret'"
-                      @click="showClientSecret = !showClientSecret"
-                    >
+                      @click="showClientSecret = !showClientSecret">
                       <component :is="showClientSecret ? EyeOff : Eye" class="h-4 w-4" aria-hidden="true" />
                     </button>
                   </div>
@@ -275,13 +229,8 @@ async function logout() {
 
                 <Field class="sm:col-span-2">
                   <FieldLabel for="org-realm-id">{{ orgRealmLabel }}</FieldLabel>
-                  <Input
-                    id="org-realm-id"
-                    v-model="orgRealmId"
-                    :placeholder="`Enter ${orgRealmLabel}`"
-                    autocomplete="off"
-                    required
-                  />
+                  <Input id="org-realm-id" v-model="orgRealmId" :placeholder="`Enter ${orgRealmLabel}`"
+                    autocomplete="off" required />
                 </Field>
               </div>
             </FieldSet>
@@ -295,33 +244,19 @@ async function logout() {
               <div v-if="isInteractiveFlow" class="grid gap-4 sm:grid-cols-2">
                 <Field>
                   <FieldLabel for="wfm-username">Username</FieldLabel>
-                  <Input
-                    id="wfm-username"
-                    v-model="username"
-                    placeholder="Enter Username"
-                    autocomplete="off"
-                    required
-                  />
+                  <Input id="wfm-username" v-model="username" placeholder="Enter Username" autocomplete="off"
+                    required />
                 </Field>
 
                 <Field>
                   <FieldLabel for="wfm-password">Password</FieldLabel>
                   <div class="relative">
-                    <Input
-                      id="wfm-password"
-                      v-model="password"
-                      :type="showPassword ? 'text' : 'password'"
-                      placeholder="Enter Password"
-                      autocomplete="off"
-                      class="pr-10"
-                      required
-                    />
-                    <button
-                      type="button"
+                    <Input id="wfm-password" v-model="password" :type="showPassword ? 'text' : 'password'"
+                      placeholder="Enter Password" autocomplete="off" class="pr-10" required />
+                    <button type="button"
                       class="absolute right-1 top-1/2 -translate-y-1/2 p-2 min-h-11 min-w-11 inline-flex items-center justify-center text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded"
                       :aria-label="showPassword ? 'Hide password' : 'Show password'"
-                      @click="showPassword = !showPassword"
-                    >
+                      @click="showPassword = !showPassword">
                       <component :is="showPassword ? EyeOff : Eye" class="h-4 w-4" aria-hidden="true" />
                     </button>
                   </div>
@@ -330,14 +265,8 @@ async function logout() {
 
               <Field :data-invalid="!!hostnameError || undefined">
                 <FieldLabel for="hostname">Hostname</FieldLabel>
-                <Input
-                  id="hostname"
-                  v-model="hostname"
-                  type="url"
-                  placeholder="https://your-tenant.example.com"
-                  autocomplete="off"
-                  required
-                />
+                <Input id="hostname" v-model="hostname" type="url" placeholder="https://your-tenant.example.com"
+                  autocomplete="off" required />
                 <FieldError v-if="hostnameError">{{ hostnameError }}</FieldError>
               </Field>
             </FieldSet>
@@ -351,20 +280,15 @@ async function logout() {
                 <Badge :variant="isAuthenticated ? 'default' : 'secondary'">
                   {{ isAuthenticated ? 'Authenticated' : 'Not Authenticated' }}
                 </Badge>
-                <span v-if="isAuthenticated" class="w-full truncate text-xs text-muted-foreground sm:w-auto sm:max-w-xs">
+                <span v-if="isAuthenticated"
+                  class="w-full truncate text-xs text-muted-foreground sm:w-auto sm:max-w-xs">
                   {{ hostname }}
                 </span>
               </div>
 
               <div class="flex flex-col gap-2 sm:flex-row sm:items-center">
-                <Button
-                  v-if="isAuthenticated"
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  class="w-full sm:w-auto"
-                  @click="logout"
-                >
+                <Button v-if="isAuthenticated" type="button" variant="outline" size="sm" class="w-full sm:w-auto"
+                  @click="logout">
                   Logout
                 </Button>
                 <Button type="submit" class="w-full sm:w-auto" :disabled="!canAuthenticate || isAuthenticating">
@@ -382,34 +306,21 @@ async function logout() {
     </Transition>
 
     <!-- Guide callout (flow selected but not yet authenticated) -->
-    <Transition
-      enter-active-class="transition-all duration-300 ease-out"
-      enter-from-class="opacity-0 translate-y-1"
-      enter-to-class="opacity-100 translate-y-0"
-      leave-active-class="transition-all duration-150 ease-in"
-      leave-from-class="opacity-100"
-      leave-to-class="opacity-0"
-    >
-      <div
-        v-if="flowType && !isAuthenticated"
-        class="rounded-lg border border-muted bg-muted/30 px-4 py-3"
-        role="note"
-      >
+    <Transition enter-active-class="transition-all duration-300 ease-out" enter-from-class="opacity-0 translate-y-1"
+      enter-to-class="opacity-100 translate-y-0" leave-active-class="transition-all duration-150 ease-in"
+      leave-from-class="opacity-100" leave-to-class="opacity-0">
+      <div v-if="flowType && !isAuthenticated" class="rounded-lg border border-muted bg-muted/30 px-4 py-3" role="note">
         <p class="text-sm text-muted-foreground">
-          Complete your credentials above and click <strong class="text-foreground font-medium">Authenticate</strong> to begin exploring endpoints.
+          Complete your credentials above and click <strong class="text-foreground font-medium">Authenticate</strong> to
+          begin exploring endpoints.
         </p>
       </div>
     </Transition>
 
     <!-- Step 3: API Explorer (appears after authentication) -->
-    <Transition
-      enter-active-class="transition-all duration-300 ease-out"
-      enter-from-class="opacity-0 translate-y-1"
-      enter-to-class="opacity-100 translate-y-0"
-      leave-active-class="transition-all duration-150 ease-in"
-      leave-from-class="opacity-100"
-      leave-to-class="opacity-0"
-    >
+    <Transition enter-active-class="transition-all duration-300 ease-out" enter-from-class="opacity-0 translate-y-1"
+      enter-to-class="opacity-100 translate-y-0" leave-active-class="transition-all duration-150 ease-in"
+      leave-from-class="opacity-100" leave-to-class="opacity-0">
       <Card v-if="isAuthenticated">
         <CardHeader>
           <CardTitle>Endpoints</CardTitle>
@@ -418,18 +329,15 @@ async function logout() {
         <CardContent class="space-y-4">
           <div class="space-y-2 w-full">
             <Label for="endpoint-select">Endpoint</Label>
-            <Select
-              id="endpoint-select"
-              v-model="selectedEndpointId"
-              aria-label="Select an API endpoint"
-            >
+            <Select id="endpoint-select" v-model="selectedEndpointId" aria-label="Select an API endpoint">
               <SelectTrigger class="min-w-1/2">
                 <SelectValue placeholder="Select an endpoint" />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup v-for="category in endpointCategories" :key="category.label" :label="category.label">
                   <component :is="SelectLabel">{{ category.label }}</component>
-                  <component :is="SelectItem" v-for="endpoint in category.endpoints" :key="endpoint.id" :value="endpoint.id">
+                  <component :is="SelectItem" v-for="endpoint in category.endpoints" :key="endpoint.id"
+                    :value="endpoint.id">
                     [{{ endpoint.method }}] {{ endpoint.path }}
                   </component>
                 </SelectGroup>
@@ -439,13 +347,10 @@ async function logout() {
 
           <!-- Request History -->
           <div v-if="history.length > 0" class="rounded-lg border">
-            <button
-              type="button"
+            <button type="button"
               class="flex w-full items-center justify-between px-4 py-3 min-h-11 text-sm font-medium transition-colors hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset"
-              :aria-expanded="historyExpanded"
-              aria-controls="request-history-panel"
-              @click="historyExpanded = !historyExpanded"
-            >
+              :aria-expanded="historyExpanded" aria-controls="request-history-panel"
+              @click="historyExpanded = !historyExpanded">
               <span>Recent Requests ({{ history.length }})</span>
               <ChevronUp v-if="historyExpanded" class="h-4 w-4 text-muted-foreground" aria-hidden="true" />
               <ChevronDown v-else class="h-4 w-4 text-muted-foreground" aria-hidden="true" />
@@ -453,22 +358,18 @@ async function logout() {
 
             <div v-if="historyExpanded" id="request-history-panel" class="border-t">
               <ul class="divide-y" role="list" aria-label="Request history entries">
-                <li
-                  v-for="entry in history"
-                  :key="entry.id"
-                  class="flex flex-col gap-2 px-4 py-3 sm:flex-row sm:items-center sm:gap-3"
-                >
+                <li v-for="entry in history" :key="entry.id"
+                  class="flex flex-col gap-2 px-4 py-3 sm:flex-row sm:items-center sm:gap-3">
                   <!-- Entry info -->
                   <div class="flex flex-1 flex-wrap items-center gap-x-2.5 gap-y-1 min-w-0">
                     <span class="text-sm font-medium truncate">{{ entry.endpointLabel }}</span>
                     <span
+                      class="inline-flex items-center rounded px-1.5 py-0.5 text-xs font-mono font-semibold shrink-0"
                       :class="[
-                        'inline-flex items-center rounded px-1.5 py-0.5 text-xs font-mono font-semibold shrink-0',
                         entry.method === 'GET'
                           ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
                           : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400',
-                      ]"
-                    >
+                      ]">
                       {{ entry.method }}
                     </span>
                     <span class="text-xs text-muted-foreground">{{ formatRelativeTime(entry.timestamp) }}</span>
@@ -479,22 +380,13 @@ async function logout() {
 
                   <!-- Actions -->
                   <div class="flex items-center gap-2 shrink-0">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      class="min-h-11 sm:min-h-8"
-                      @click="selectedEndpointId = entry.endpointId as WfmEndpointId"
-                    >
+                    <Button variant="outline" size="sm" class="min-h-11 sm:min-h-8"
+                      @click="selectedEndpointId = entry.endpointId as WfmEndpointId">
                       <RotateCcw class="h-3.5 w-3.5" aria-hidden="true" />
                       Reload
                     </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon-sm"
-                      class="min-h-11 min-w-11 sm:min-h-8 sm:min-w-8"
-                      :aria-label="`Remove ${entry.endpointLabel} from history`"
-                      @click="removeEntry(entry.id)"
-                    >
+                    <Button variant="ghost" size="icon-sm" class="min-h-11 min-w-11 sm:min-h-8 sm:min-w-8"
+                      :aria-label="`Remove ${entry.endpointLabel} from history`" @click="removeEntry(entry.id)">
                       <X class="h-3.5 w-3.5" aria-hidden="true" />
                     </Button>
                   </div>
@@ -502,12 +394,7 @@ async function logout() {
               </ul>
 
               <div class="border-t px-4 py-3">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  class="w-full sm:w-auto min-h-11 sm:min-h-8"
-                  @click="clearHistory"
-                >
+                <Button variant="outline" size="sm" class="w-full sm:w-auto min-h-11 sm:min-h-8" @click="clearHistory">
                   Clear all
                 </Button>
               </div>
@@ -516,25 +403,15 @@ async function logout() {
 
           <!-- Endpoint detail / results area -->
           <section aria-label="Endpoint details">
-            <Transition
-              enter-active-class="transition-all duration-200 ease-out"
-              enter-from-class="opacity-0"
-              enter-to-class="opacity-100"
-              leave-active-class="transition-all duration-100 ease-in"
-              leave-from-class="opacity-100"
-              leave-to-class="opacity-0"
-              mode="out-in"
-            >
+            <Transition enter-active-class="transition-all duration-200 ease-out" enter-from-class="opacity-0"
+              enter-to-class="opacity-100" leave-active-class="transition-all duration-100 ease-in"
+              leave-from-class="opacity-100" leave-to-class="opacity-0" mode="out-in">
               <div v-if="selectedEndpoint" :key="selectedEndpoint.id" class="rounded-lg border p-3 sm:p-4">
                 <EndpointPanel :endpoint="selectedEndpoint" :is-authenticated="isAuthenticated" />
               </div>
 
-              <div
-                v-else
-                key="empty"
-                class="flex min-h-32 items-center justify-center rounded-lg border border-dashed"
-                aria-live="polite"
-              >
+              <div v-else key="empty" class="flex min-h-32 items-center justify-center rounded-lg border border-dashed"
+                aria-live="polite">
                 <p class="text-sm text-muted-foreground">Select an endpoint above to get started.</p>
               </div>
             </Transition>

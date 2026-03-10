@@ -162,57 +162,36 @@ const allExpanded = computed(
           </template>
         </p>
         <div class="flex items-center gap-1 text-xs">
-          <button
-            type="button"
+          <button type="button"
             class="px-2 py-1 rounded text-muted-foreground hover:text-foreground hover:bg-muted transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-            :disabled="allExpanded"
-            @click="expandAll"
-          >
+            :disabled="allExpanded" @click="expandAll">
             Expand all
           </button>
           <span class="text-border">·</span>
-          <button
-            type="button"
+          <button type="button"
             class="px-2 py-1 rounded text-muted-foreground hover:text-foreground hover:bg-muted transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-            :disabled="expandedIds.size === 0"
-            @click="collapseAll"
-          >
+            :disabled="expandedIds.size === 0" @click="collapseAll">
             Collapse all
           </button>
         </div>
       </div>
       <div class="relative w-full sm:w-64">
-        <Search
-          class="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground"
-          aria-hidden="true"
-        />
-        <Input
-          v-model="search"
-          placeholder="Search rules..."
-          class="pl-8 h-9 text-sm"
-          aria-label="Search adjustment rules"
-        />
+        <Search class="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground"
+          aria-hidden="true" />
+        <Input v-model="search" placeholder="Search rules..." class="pl-8 h-9 text-sm"
+          aria-label="Search adjustment rules" />
       </div>
     </div>
 
     <!-- Rule list -->
     <div class="rounded-md border divide-y">
-      <div
-        v-for="rule in filtered"
-        :key="rule.id"
-      >
+      <div v-for="rule in filtered" :key="rule.id">
         <!-- Rule header row -->
-        <button
-          type="button"
+        <button type="button"
           class="flex w-full items-center gap-3 px-4 py-3 min-h-11 text-sm transition-colors hover:bg-muted/50"
-          :aria-expanded="isExpanded(rule.id)"
-          @click="toggleExpanded(rule.id)"
-        >
-          <component
-            :is="isExpanded(rule.id) ? ChevronDown : ChevronRight"
-            class="h-5 w-5 shrink-0 text-muted-foreground"
-            aria-hidden="true"
-          />
+          :aria-expanded="isExpanded(rule.id)" @click="toggleExpanded(rule.id)">
+          <component :is="isExpanded(rule.id) ? ChevronDown : ChevronRight"
+            class="h-5 w-5 shrink-0 text-muted-foreground" aria-hidden="true" />
           <span class="font-medium text-foreground text-left wrap-break-word min-w-0">{{ rule.name }}</span>
           <Badge variant="secondary" class="ml-auto shrink-0">
             {{ getVersions(rule).length }} version{{ getVersions(rule).length === 1 ? '' : 's' }}
@@ -221,11 +200,8 @@ const allExpanded = computed(
 
         <!-- Expanded: version cards -->
         <div v-if="isExpanded(rule.id)" class="border-t bg-muted/20 px-3 py-4 space-y-4 sm:px-5">
-          <div
-            v-for="(version, vi) in getVersions(rule)"
-            :key="version.versionId ?? vi"
-            class="rounded-lg border bg-background p-4 space-y-4 sm:p-5"
-          >
+          <div v-for="(version, vi) in getVersions(rule)" :key="version.versionId ?? vi"
+            class="rounded-lg border bg-background p-4 space-y-4 sm:p-5">
             <!-- Version header -->
             <div class="flex flex-wrap items-center gap-x-4 gap-y-1.5">
               <span class="text-sm font-medium text-foreground">
@@ -237,19 +213,13 @@ const allExpanded = computed(
             </div>
 
             <!-- Description -->
-            <p
-              v-if="version.description"
-              class="text-sm text-muted-foreground"
-            >
+            <p v-if="version.description" class="text-sm text-muted-foreground">
               {{ version.description }}
             </p>
 
             <!-- Triggers -->
-            <div
-              v-for="(trigger, ti) in getTriggers(version)"
-              :key="ti"
-              class="rounded-md border bg-muted/30 p-3.5 space-y-3 sm:p-4"
-            >
+            <div v-for="(trigger, ti) in getTriggers(version)" :key="ti"
+              class="rounded-md border bg-muted/30 p-3.5 space-y-3 sm:p-4">
               <p class="text-xs font-medium uppercase tracking-wide text-muted-foreground">
                 Trigger {{ getTriggers(version).length > 1 ? ti + 1 : '' }}
               </p>
@@ -258,7 +228,8 @@ const allExpanded = computed(
               <dl class="grid grid-cols-1 gap-x-6 gap-y-2.5 text-sm sm:grid-cols-2">
                 <div class="flex gap-3">
                   <dt class="text-muted-foreground shrink-0">Job/Location:</dt>
-                  <dd class="text-foreground wrap-break-word min-w-0">{{ trigger.jobOrLocation?.qualifier ?? '--' }}</dd>
+                  <dd class="text-foreground wrap-break-word min-w-0">{{ trigger.jobOrLocation?.qualifier ?? '--' }}
+                  </dd>
                 </div>
                 <div class="flex gap-3">
                   <dt class="text-muted-foreground shrink-0">Labor Categories:</dt>
@@ -275,22 +246,22 @@ const allExpanded = computed(
               </dl>
 
               <!-- Allocations -->
-              <div
-                v-for="(alloc, ai) in getAllocations(trigger)"
-                :key="ai"
-                class="rounded border bg-background px-3.5 py-3 sm:px-4"
-              >
+              <div v-for="(alloc, ai) in getAllocations(trigger)" :key="ai"
+                class="rounded border bg-background px-3.5 py-3 sm:px-4">
                 <p class="text-xs font-medium text-muted-foreground mb-2">
                   Allocation {{ getAllocations(trigger).length > 1 ? ai + 1 : '' }}
                 </p>
                 <dl class="grid grid-cols-1 gap-x-6 gap-y-2.5 text-sm sm:grid-cols-2 lg:grid-cols-3">
                   <div class="flex gap-3">
                     <dt class="text-muted-foreground shrink-0">Type:</dt>
-                    <dd class="text-foreground wrap-break-word min-w-0">{{ alloc.adjustmentType ?? alloc.type ?? '--' }}</dd>
+                    <dd class="text-foreground wrap-break-word min-w-0">{{ alloc.adjustmentType ?? alloc.type ?? '--' }}
+                    </dd>
                   </div>
                   <div class="flex gap-3">
                     <dt class="text-muted-foreground shrink-0">Pay Code:</dt>
-                    <dd class="text-foreground wrap-break-word min-w-0">{{ alloc.payCode?.name ?? alloc.payCode?.qualifier ?? '--' }}</dd>
+                    <dd class="text-foreground wrap-break-word min-w-0">{{ alloc.payCode?.name ??
+                      alloc.payCode?.qualifier
+                      ?? '--' }}</dd>
                   </div>
                   <div v-if="alloc.amount != null" class="flex gap-3">
                     <dt class="text-muted-foreground shrink-0">Amount:</dt>
@@ -309,19 +280,13 @@ const allExpanded = computed(
             </div>
 
             <!-- No triggers fallback -->
-            <p
-              v-if="getTriggers(version).length === 0"
-              class="text-xs text-muted-foreground italic"
-            >
+            <p v-if="getTriggers(version).length === 0" class="text-xs text-muted-foreground italic">
               No triggers configured for this version.
             </p>
           </div>
 
           <!-- No versions fallback -->
-          <p
-            v-if="getVersions(rule).length === 0"
-            class="text-xs text-muted-foreground italic"
-          >
+          <p v-if="getVersions(rule).length === 0" class="text-xs text-muted-foreground italic">
             No versions found for this rule.
           </p>
         </div>

@@ -58,7 +58,12 @@ useSeoMeta({
           accordance with your organization's policies regarding API access.
         </p>
         <p>
-          All API endpoints, request formats, and response structures exposed by this application are sourced from UKG's publicly available developer documentation at <NuxtLink to="https://developer.ukg.com" target="_blank" class="text-primary hover:text-accent">developer.ukg.com</NuxtLink>. No proprietary or non-public information is used. WFM Relay does not interact with the WFM API in any way that is not already documented and intended by UKG — it simply provides a cleaner interface for sending documented requests and reading the responses.
+          All API endpoints, request formats, and response structures exposed by this application are sourced from UKG's
+          publicly available developer documentation at <NuxtLink to="https://developer.ukg.com" target="_blank"
+            class="text-primary hover:text-accent">developer.ukg.com</NuxtLink>. No proprietary or non-public
+          information is used. WFM Relay does not interact with the WFM API in any way that is not already documented
+          and intended by UKG — it simply provides a cleaner interface for sending documented requests and reading the
+          responses.
         </p>
         <p>
           <strong class="font-medium">Credentials and tokens are never stored or logged by this application.</strong>
@@ -93,12 +98,8 @@ useSeoMeta({
         <p class="mb-4">
           Found a bug? Have an idea for a new endpoint or improvement? Open an issue on GitHub.
         </p>
-        <a
-          href="https://github.com/nconklindev/wfm-relay/issues"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="inline-flex items-center gap-1.5 text-primary hover:text-accent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded"
-        >
+        <a href="https://github.com/nconklindev/wfm-relay/issues" target="_blank" rel="noopener noreferrer"
+          class="inline-flex items-center gap-1.5 text-primary hover:text-accent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded">
           Open an issue on GitHub
           <ExternalLink class="h-3.5 w-3.5" aria-hidden="true" />
         </a>

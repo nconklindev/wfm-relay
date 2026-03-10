@@ -12,15 +12,17 @@ export function getTokenUrl(hostname: string): string {
   try {
     const { host } = new URL(hostname)
     if (host.toLowerCase().includes('cfn')) return config.wfmTokenUrlEval
-  }
-  catch {
+  } catch {
     return config.wfmTokenUrlEval
   }
 
   return config.wfmTokenUrlProd
 }
 
-export function getWfmSession(event: H3Event): { token: string; hostname: string } {
+export function getWfmSession(event: H3Event): {
+  token: string
+  hostname: string
+} {
   return {
     token: getCookie(event, TOKEN_COOKIE) ?? '',
     hostname: getCookie(event, HOSTNAME_COOKIE) ?? '',
@@ -70,8 +72,7 @@ export async function callWfmApi(
         ? { query: data as Record<string, string> }
         : { body: (data ?? {}) as Record<string, unknown> }),
     })
-  }
-  catch (error) {
+  } catch (error) {
     const err = error as { response?: { status: number; _data?: unknown } }
     const wfmData = err.response?._data as Record<string, unknown> | undefined
     // Surface the WFM error message so the client can display it directly
