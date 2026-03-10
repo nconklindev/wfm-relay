@@ -1,0 +1,56 @@
+name: 📝 Documentation Issue
+description: Report a typo, outdated info, or other content problem
+title: "[Docs]: "
+labels: ["documentation"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve our docs! Please fill out the details below.
+
+  - type: input
+    id: page
+    attributes:
+      label: Affected Page or Section
+      description: Link to the page or describe the section with the issue
+      placeholder: "https://example.com/docs/getting-started"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: issue-type
+    attributes:
+      label: Issue Type
+      options:
+        - Typo
+        - Incorrect information
+        - Outdated content
+        - Broken link
+        - Missing information
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What's wrong?
+      description: Describe the problem clearly
+      placeholder: "The code example on line 3 uses `foo()` but it should be `bar()`"
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Suggested Fix
+      description: If you know what it should say, put it here (optional)
+      placeholder: "Change X to Y"
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checklist
+      options:
+        - label: I searched existing issues to make sure this isn't a duplicate
+          required: true
