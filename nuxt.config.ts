@@ -1,8 +1,8 @@
-import tailwindcss from "@tailwindcss/vite";
+import tailwindcss from '@tailwindcss/vite'
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  compatibilityDate: "2025-07-15",
+  compatibilityDate: '2025-07-15',
   devtools: {
     enabled: true,
 
@@ -10,22 +10,22 @@ export default defineNuxtConfig({
       enabled: true,
     },
   },
-  css: ["~/assets/css/tailwind.css"],
+  css: ['~/assets/css/tailwind.css'],
 
   app: {
     head: {
-      htmlAttrs: { lang: "en" },
+      htmlAttrs: { lang: 'en' },
       meta: [
-        { name: "viewport", content: "width=device-width, initial-scale=1" },
+        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         {
-          name: "description",
+          name: 'description',
           content:
-            "An unofficial API explorer for UKG Workforce Management. Authenticate and explore API endpoints without writing code.",
+            'An unofficial API explorer for UKG Workforce Management. Authenticate and explore API endpoints without writing code.',
         },
-        { property: "og:site_name", content: "WFM Relay" },
-        { property: "og:type", content: "website" },
-        { name: "twitter:card", content: "summary" },
-        { name: "robots", content: "index, follow" },
+        { property: 'og:site_name', content: 'WFM Relay' },
+        { property: 'og:type', content: 'website' },
+        { name: 'twitter:card', content: 'summary' },
+        { name: 'robots', content: 'index, follow' },
       ],
     },
   },
@@ -37,21 +37,22 @@ export default defineNuxtConfig({
   },
 
   vite: {
-    plugins: [tailwindcss() as any],
+    // @ts-expect-error — @tailwindcss/vite and Nuxt reference different rollup/vite type copies
+  plugins: [tailwindcss()],
   },
-  modules: ["shadcn-nuxt", "nuxt-security"],
+  modules: ['shadcn-nuxt', 'nuxt-security', '@nuxt/eslint'],
   shadcn: {
     /**
      * Prefix for all the imported component.
      * @default "Ui"
      */
-    prefix: "",
+    prefix: '',
     /**
      * Directory that the component lives in.
      * Will respect the Nuxt aliases.
      * @link https://nuxt.com/docs/api/nuxt-config#alias
      * @default "@/components/ui"
      */
-    componentDir: "@/components/ui",
+    componentDir: '@/components/ui',
   },
-});
+})

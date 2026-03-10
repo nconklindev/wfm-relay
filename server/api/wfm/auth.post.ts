@@ -11,11 +11,17 @@ export default defineEventHandler(async (event) => {
   const { flow, clientId, clientSecret, orgRealmId, hostname } = body
 
   if (!flow || !clientId || !clientSecret || !orgRealmId || !hostname) {
-    throw createError({ statusCode: 400, statusMessage: 'Missing required fields' })
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'Missing required fields',
+    })
   }
 
   if (flow === 'interactive' && (!body.username || !body.password)) {
-    throw createError({ statusCode: 400, statusMessage: 'Username and password required for interactive flow' })
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'Username and password required for interactive flow',
+    })
   }
 
   const tokenUrl = getTokenUrl(hostname)
@@ -49,8 +55,7 @@ export default defineEventHandler(async (event) => {
 
     setWfmSession(event, response.access_token, hostname)
     return { success: true }
-  }
-  catch (error) {
+  } catch (error) {
     const err = error as { response?: { status: number; _data?: unknown } }
     throw createError({
       statusCode: err.response?.status ?? 502,

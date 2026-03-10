@@ -39,8 +39,9 @@ useSeoMeta({
       <CardContent class="space-y-4 text-sm">
         <p>
           Before you can use WFM Relay, you need a set of API credentials for your WFM
-          environment. These are separate from your regular WFM login. Admins can set up a new Client under <strong class="font-medium">Administration → Application Setup →
-          Common Setup → Client Management</strong>.
+          environment. These are separate from your regular WFM login. Admins can set up a new Client under <strong
+            class="font-medium">Administration → Application Setup →
+            Common Setup → Client Management</strong>.
         </p>
 
         <div class="space-y-3">
@@ -77,7 +78,8 @@ useSeoMeta({
           </div>
 
           <div class="rounded-md border bg-muted/30 p-3 space-y-1">
-            <p class="font-medium">Username &amp; Password <span class="font-normal text-muted-foreground">(Interactive flow only)</span></p>
+            <p class="font-medium">Username &amp; Password <span class="font-normal text-muted-foreground">(Interactive
+                flow only)</span></p>
             <p class="text-muted-foreground">
               Your personal WFM login credentials. Only required if you choose the
               Interactive authentication flow (see Step 2).
@@ -103,7 +105,8 @@ useSeoMeta({
 
         <div class="space-y-3">
           <div class="rounded-md border bg-muted/30 p-3 space-y-1.5">
-            <p class="font-medium">Interactive <span class="text-muted-foreground font-normal">(recommended for most users)</span></p>
+            <p class="font-medium">Interactive <span class="text-muted-foreground font-normal">(recommended for most
+                users)</span></p>
             <p class="text-muted-foreground">
               You log in with your own WFM username and password alongside your API credentials.
               The data you can retrieve is scoped to whatever your WFM account has permission to
@@ -116,7 +119,8 @@ useSeoMeta({
           </div>
 
           <div class="rounded-md border bg-muted/30 p-3 space-y-1.5">
-            <p class="font-medium">Non-Interactive <span class="text-muted-foreground font-normal">(service account)</span></p>
+            <p class="font-medium">Non-Interactive <span class="text-muted-foreground font-normal">(service
+                account)</span></p>
             <p class="text-muted-foreground">
               Authenticates using only the API client credentials, without a personal username and
               password. This requires a dedicated API service account to be configured in WFM with
@@ -143,20 +147,29 @@ useSeoMeta({
       <CardContent class="space-y-3 text-sm">
         <ol class="space-y-3 list-none">
           <li class="flex gap-3">
-            <span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-semibold">1</span>
-            <span>On the home page, select either <strong class="font-medium">Interactive</strong> or <strong class="font-medium">Non-Interactive</strong> under "Authentication Flow".</span>
+            <span
+              class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-semibold">1</span>
+            <span>On the home page, select either <strong class="font-medium">Interactive</strong> or <strong
+                class="font-medium">Non-Interactive</strong> under "Authentication Flow".</span>
           </li>
           <li class="flex gap-3">
-            <span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-semibold">2</span>
-            <span>Fill in your credentials. All fields are required. Your Environment URL should include <code class="font-mono text-xs">https://</code>.</span>
+            <span
+              class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-semibold">2</span>
+            <span>Fill in your credentials. All fields are required. Your Environment URL should include <code
+                class="font-mono text-xs">https://</code>.</span>
           </li>
           <li class="flex gap-3">
-            <span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-semibold">3</span>
-            <span>Click <strong class="font-medium">Authenticate</strong>. If your credentials are correct, the form will be replaced with a confirmation showing your environment URL and a <strong class="font-medium">Log Out</strong> button.</span>
+            <span
+              class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-semibold">3</span>
+            <span>Click <strong class="font-medium">Authenticate</strong>. If your credentials are correct, the form
+              will be replaced with a confirmation showing your environment URL and a <strong class="font-medium">Log
+                Out</strong> button.</span>
           </li>
           <li class="flex gap-3">
-            <span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-semibold">4</span>
-            <span>You are now ready to query endpoints. Your session is stored securely in your browser and will expire after 8 hours.</span>
+            <span
+              class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground text-xs font-semibold">4</span>
+            <span>You are now ready to query endpoints. Your session is stored securely in your browser and will expire
+              after 8 hours.</span>
           </li>
         </ol>
       </CardContent>
@@ -256,12 +269,8 @@ useSeoMeta({
           <p class="font-medium">Something else isn't working</p>
           <p class="text-muted-foreground">
             Open an issue on
-            <a
-              href="https://github.com/nconklindev/wfm-relay/issues"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="text-primary hover:text-accent transition-colors underline underline-offset-2"
-            >GitHub</a>
+            <a href="https://github.com/nconklindev/wfm-relay/issues" target="_blank" rel="noopener noreferrer"
+              class="text-primary hover:text-accent transition-colors underline underline-offset-2">GitHub</a>
             and describe what happened.
           </p>
         </div>

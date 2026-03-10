@@ -67,7 +67,8 @@ export const ENDPOINT_DEFS = [
         type: 'text',
         label: 'Qualifier',
         placeholder: 'UKG Inc.',
-        description: 'Name of the node from the Business Structure to retrieve all descendant nodes of.',
+        description:
+          'Name of the node from the Business Structure to retrieve all descendant nodes of.',
       },
       {
         name: 'date',
@@ -98,7 +99,7 @@ export const ENDPOINT_DEFS = [
     category: 'Common Resources',
     notes: [
       'Retrieves all public Hyperfind Queries available to the authenticated user.',
-      'Uses the API user\'s access rights.',
+      "Uses the API user's access rights.",
       'Review the table for at-a-glance information or the raw JSON for additional details.',
     ],
   },
@@ -161,44 +162,49 @@ export const ENDPOINT_DEFS = [
     ],
   },
   {
-    id: 'labor-category-entries',
+    id: 'labor-category-entries-paginated',
     label: 'Labor Category Entries',
     method: 'POST',
-    path: 'api/v1/commons/labor_entries/multi_read',
-    description: 'Retrieve labor category entries via multi-read.',
-    category: 'Labor Categories',
-    notes: [
-      'Retrieves Labor Category Entries from WFM.',
-      'Enter a Labor Category Entry Name to retrieve its data.',
-      'Only retrieves one entry at a time — use the paginated variant for bulk retrieval.',
-    ],
-    inputs: [
-      {
-        name: 'name',
-        type: 'text',
-        label: 'Labor Category Entry Name',
-        placeholder: 'Labor Category Entry Name',
-        required: true,
-      },
-    ],
-  },
-  {
-    id: 'labor-category-entries-paginated',
-    label: 'Labor Category Entries (Paginated)',
-    method: 'POST',
     path: 'api/v1/commons/labor_entries/apply_read',
-    description: 'Retrieve labor category entries with pagination support.',
+    description: 'Retrieve labor category entries, optionally filtered by category.',
     category: 'Labor Categories',
     notes: [
-      'Retrieves labor category entries from the system.',
-      'Select specific Labor Categories to filter results, or leave empty to retrieve all entries.',
-      'Selecting fewer categories improves loading time for large datasets.',
+      'Retrieves Labor Category Entries from the system.',
+      'Select a Labor Category to filter results, or leave empty to retrieve all entries.',
       'Large datasets (50k+ records) may take longer to load.',
+      'Review the table for at-a-glance information or the raw JSON for additional details.',
     ],
     // Rendered via LaborCategorySelect — registered in EndpointPanel's CUSTOM_INPUT_REGISTRY
   },
 
   // ── Timekeeping ───────────────────────────────────────────────────
+  {
+    id: 'accrual-codes',
+    label: 'Accrual Codes',
+    method: 'GET',
+    path: 'api/v2/timekeeping/setup/accrual_codes',
+    description: 'Retrieve accrual code definitions.',
+    category: 'Timekeeping',
+    notes: [
+      'Retrieves all Accrual Codes available to the manager.',
+      "Uses the API user's access rights.",
+      'Review the table for at-a-glance information or the raw JSON for additional details.',
+    ],
+  },
+  {
+    id: 'accrual-policies',
+    label: 'Accrual Policies',
+    method: 'POST',
+    path: 'api/v1/timekeeping/setup/accrual_policies/multi_read',
+    description: 'Retrieve the list of accrual policies with details.',
+    category: 'Timekeeping',
+    notes: [
+      'Retrieves all Accrual Policies available to the manager.',
+      "Uses the API user's access rights.",
+      'Review the table for at-a-glance information or the raw JSON for additional details.',
+    ],
+    defaultBody: { where: { accrualPolicies: { refs: [] } } },
+  },
   {
     id: 'pay-codes',
     label: 'Pay Codes',
@@ -208,7 +214,7 @@ export const ENDPOINT_DEFS = [
     category: 'Timekeeping',
     notes: [
       'Retrieves all Pay Codes available to the manager.',
-      'Uses the API user\'s access rights.',
+      "Uses the API user's access rights.",
       'Review the table for at-a-glance information or the raw JSON for additional details.',
     ],
   },
@@ -233,7 +239,7 @@ export const ENDPOINT_DEFS = [
     category: 'Timekeeping',
     notes: [
       'Retrieves all available Adjustment Rules.',
-      'Uses the API user\'s access rights.',
+      "Uses the API user's access rights.",
       'Review the table for at-a-glance information or the raw JSON for additional details.',
     ],
   },
@@ -241,13 +247,13 @@ export const ENDPOINT_DEFS = [
     id: 'percent-allocation-rules',
     label: 'Percent Allocation Rules',
     method: 'GET',
-    path: 'api/v1/timekeeping/setup/percentage_allocation_rules?all_details=true',
+    path: 'api/v1/timekeeping/setup/percentage_allocation_rules',
     description: 'Retrieve percentage allocation rules with full details.',
     category: 'Timekeeping',
     notes: [
       'Retrieves all Percentage Allocation Rules.',
       'The all_details flag is enabled, returning full rule configuration.',
-      'Uses the API user\'s access rights.',
+      "Uses the API user's access rights.",
       'Review the table for at-a-glance information or the raw JSON for additional details.',
     ],
   },
@@ -270,7 +276,7 @@ export const ENDPOINT_DEFS = [
 ] as const satisfies WfmEndpointDef[]
 
 /** Union of all valid endpoint IDs, derived from the definitions array. */
-export type WfmEndpointId = typeof ENDPOINT_DEFS[number]['id']
+export type WfmEndpointId = (typeof ENDPOINT_DEFS)[number]['id']
 
 export function useWfm() {
   /** The flat list of endpoint definitions for UI consumption. */
@@ -294,7 +300,7 @@ export function useWfm() {
    * Resolves the HTTP method and path from ENDPOINT_DEFS using the given id.
    */
   async function call<T = unknown>(id: WfmEndpointId, data?: unknown): Promise<T> {
-    const def = ENDPOINT_DEFS.find(e => e.id === id)
+    const def = ENDPOINT_DEFS.find((e) => e.id === id)
     if (!def) throw new Error(`Unknown WFM endpoint: "${id}"`)
     return $fetch<T>('/api/wfm/call', {
       method: 'POST',

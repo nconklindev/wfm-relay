@@ -61,12 +61,9 @@ function goHome() {
 </script>
 
 <template>
-  <div class="min-h-screen flex flex-col items-center justify-center bg-background text-foreground text-center px-4 sm:px-6">
-    <component
-      :is="errorConfig.icon"
-      class="mb-4 h-10 w-10 sm:h-12 sm:w-12 text-muted-foreground"
-      aria-hidden="true"
-    />
+  <div
+    class="min-h-screen flex flex-col items-center justify-center bg-background text-foreground text-center px-4 sm:px-6">
+    <component :is="errorConfig.icon" class="mb-4 h-10 w-10 sm:h-12 sm:w-12 text-muted-foreground" aria-hidden="true" />
 
     <p class="mb-1 text-3xl sm:text-5xl font-bold text-primary">
       {{ statusCode }}
@@ -89,11 +86,8 @@ function goHome() {
       </Button>
     </div>
 
-    <p
-      v-if="error.message && statusCode >= 500"
-      class="mt-8 max-w-70 sm:max-w-sm truncate font-mono text-xs text-muted-foreground"
-      :title="error.message"
-    >
+    <p v-if="error.message && statusCode >= 500"
+      class="mt-8 max-w-70 sm:max-w-sm truncate font-mono text-xs text-muted-foreground" :title="error.message">
       {{ error.message }}
     </p>
   </div>

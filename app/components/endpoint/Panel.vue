@@ -10,6 +10,11 @@ import LaborCategorySelect from './inputs/LaborCategorySelect.vue'
 import AdjustmentRulesResult from './results/AdjustmentRules.vue'
 import PayRulesResult from './results/PayRules.vue'
 
+const props = defineProps<{
+  endpoint: WfmEndpointDef
+  isAuthenticated: boolean
+}>()
+
 /**
  * Registry of custom input components for endpoints that need more than simple
  * text/date fields. To support a new complex endpoint, add its ID here and
@@ -30,11 +35,6 @@ const CUSTOM_RESULT_REGISTRY: Partial<Record<WfmEndpointId, Component>> = {
   'adjustment-rules': AdjustmentRulesResult,
   'pay-rules': PayRulesResult,
 }
-
-const props = defineProps<{
-  endpoint: WfmEndpointDef
-  isAuthenticated: boolean
-}>()
 
 const { call } = useWfm()
 const { addEntry } = useRequestHistory()
@@ -171,10 +171,8 @@ function buildGenericBody(): Record<string, string> | undefined {
   <div class="space-y-6">
     <!-- Endpoint header -->
     <div class="flex flex-wrap items-center gap-2 sm:gap-3">
-      <span
-        :class="['inline-flex items-center rounded px-2 py-0.5 text-xs font-mono font-semibold shrink-0', methodClass]"
-        :aria-label="`HTTP method: ${endpoint.method}`"
-      >
+      <span class="inline-flex items-center rounded px-2 py-0.5 text-xs font-mono font-semibold shrink-0"
+        :class="[methodClass]" :aria-label="`HTTP method: ${endpoint.method}`">
         {{ endpoint.method }}
       </span>
       <code class="text-xs sm:text-sm font-mono text-muted-foreground break-all min-w-0">{{ endpoint.path }}</code>
@@ -185,32 +183,18 @@ function buildGenericBody(): Record<string, string> | undefined {
       <!-- Left: inputs + execute -->
       <section class="space-y-4">
         <!-- Custom input component -->
-        <component
-          :is="customInputComponent"
-          v-if="hasCustomInput"
-          :is-authenticated="isAuthenticated"
-          @update:model-value="customData = $event"
-        />
+        <component :is="customInputComponent" v-if="hasCustomInput" :is-authenticated="isAuthenticated"
+          @update:model-value="customData = $event" />
 
         <!-- Generic declarative inputs -->
         <template v-else-if="endpoint.inputs?.length">
-          <div
-            v-for="input in endpoint.inputs"
-            :key="input.name"
-            class="space-y-1.5"
-          >
+          <div v-for="input in endpoint.inputs" :key="input.name" class="space-y-1.5">
             <Label :for="`input-${input.name}`">{{ input.label }}</Label>
             <p v-if="input.description" class="text-xs text-muted-foreground">
               {{ input.description }}
             </p>
-            <Input
-              :id="`input-${input.name}`"
-              v-model="formData[input.name]"
-              :type="input.type"
-              :placeholder="input.placeholder"
-              :required="input.required"
-              :disabled="!isAuthenticated"
-            />
+            <Input :id="`input-${input.name}`" v-model="formData[input.name]" :type="input.type"
+              :placeholder="input.placeholder" :required="input.required" :disabled="!isAuthenticated" />
           </div>
         </template>
 
@@ -234,11 +218,7 @@ function buildGenericBody(): Record<string, string> | undefined {
             About this endpoint
           </p>
           <ul class="space-y-1 text-sm">
-            <li
-              v-for="(note, i) in endpoint.notes"
-              :key="i"
-              class="flex gap-2"
-            >
+            <li v-for="(note, i) in endpoint.notes" :key="i" class="flex gap-2">
               <span class="mt-0.5 shrink-0 text-muted-foreground" aria-hidden="true">·</span>
               {{ note }}
             </li>
@@ -248,11 +228,9 @@ function buildGenericBody(): Record<string, string> | undefined {
     </div>
 
     <!-- Error -->
-    <div
-      v-if="error"
+    <div v-if="error"
       class="flex items-start gap-2 rounded-md border border-destructive/50 bg-destructive/10 px-3 py-2 text-sm text-destructive"
-      role="alert"
-    >
+      role="alert">
       <CircleAlert class="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
       {{ error }}
     </div>
@@ -260,31 +238,21 @@ function buildGenericBody(): Record<string, string> | undefined {
     <!-- Results -->
     <template v-if="hasResponse">
       <!-- Result display: custom component if registered, otherwise generic table -->
-      <component
-        :is="customResultComponent"
-        v-if="hasCustomResult"
-        :response="response"
-      />
+      <component :is="customResultComponent" v-if="hasCustomResult" :response="response" />
       <EndpointApiDataTable v-else :response="response" />
 
       <!-- Raw JSON (collapsible) -->
       <div class="rounded-md border">
         <div class="flex items-center">
-          <button
-            type="button"
+          <button type="button"
             class="flex flex-1 items-center justify-between px-4 py-3 min-h-11 text-sm font-medium transition-colors hover:bg-muted/50"
-            :aria-expanded="rawJsonExpanded"
-            @click="rawJsonExpanded = !rawJsonExpanded"
-          >
+            :aria-expanded="rawJsonExpanded" @click="rawJsonExpanded = !rawJsonExpanded">
             Raw JSON
             <span class="text-xs text-muted-foreground">{{ rawJsonExpanded ? 'Hide' : 'Show' }}</span>
           </button>
-          <button
-            type="button"
+          <button type="button"
             class="flex items-center gap-1.5 border-l px-3 py-3 min-h-11 text-xs text-muted-foreground transition-colors hover:bg-muted/50 hover:text-foreground"
-            :aria-label="copied ? 'Copied!' : 'Copy JSON to clipboard'"
-            @click="copy(rawJson)"
-          >
+            :aria-label="copied ? 'Copied!' : 'Copy JSON to clipboard'" @click="copy(rawJson)">
             <Check v-if="copied" class="h-3.5 w-3.5 text-primary" aria-hidden="true" />
             <Clipboard v-else class="h-3.5 w-3.5" aria-hidden="true" />
             <span>{{ copied ? 'Copied!' : 'Copy' }}</span>

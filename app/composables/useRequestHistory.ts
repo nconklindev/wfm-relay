@@ -31,7 +31,7 @@ export function useRequestHistory() {
   }
 
   function removeEntry(id: string) {
-    history.value = history.value.filter(e => e.id !== id)
+    history.value = history.value.filter((e) => e.id !== id)
   }
 
   function clearHistory() {

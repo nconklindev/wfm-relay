@@ -141,7 +141,7 @@ function formatDate(date: string | undefined): string {
 
 /** Subtract one day from a YYYY-MM-DD string using UTC to avoid DST issues. */
 function subtractOneDay(dateStr: string): string {
-  const [year, month, day] = dateStr.split('-').map(Number)
+  const [year, month, day] = dateStr.split('-').map(Number) as [number, number, number]
   const d = new Date(Date.UTC(year, month - 1, day))
   d.setUTCDate(d.getUTCDate() - 1)
   return d.toISOString().substring(0, 10)
@@ -284,57 +284,35 @@ function isSectionExpanded(sectionKey: string): boolean {
           </template>
         </p>
         <div class="flex items-center gap-1 text-xs">
-          <button
-            type="button"
+          <button type="button"
             class="px-2 py-1 rounded text-muted-foreground hover:text-foreground hover:bg-muted transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-            :disabled="allExpanded"
-            @click="expandAll"
-          >
+            :disabled="allExpanded" @click="expandAll">
             Expand all
           </button>
           <span class="text-border">·</span>
-          <button
-            type="button"
+          <button type="button"
             class="px-2 py-1 rounded text-muted-foreground hover:text-foreground hover:bg-muted transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-            :disabled="expandedRules.size === 0"
-            @click="collapseAll"
-          >
+            :disabled="expandedRules.size === 0" @click="collapseAll">
             Collapse all
           </button>
         </div>
       </div>
       <div class="relative w-full sm:w-64">
-        <Search
-          class="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground"
-          aria-hidden="true"
-        />
-        <Input
-          v-model="search"
-          placeholder="Search rules..."
-          class="pl-8 h-9 text-sm"
-          aria-label="Search pay rules"
-        />
+        <Search class="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground"
+          aria-hidden="true" />
+        <Input v-model="search" placeholder="Search rules..." class="pl-8 h-9 text-sm" aria-label="Search pay rules" />
       </div>
     </div>
 
     <!-- Rule list -->
     <div class="rounded-md border divide-y">
-      <div
-        v-for="{ rule, versions } in filteredWithVersions"
-        :key="rule.id"
-      >
+      <div v-for="{ rule, versions } in filteredWithVersions" :key="rule.id">
         <!-- Rule header row -->
-        <button
-          type="button"
+        <button type="button"
           class="flex w-full items-center gap-3 px-4 py-3 min-h-11 text-sm transition-colors hover:bg-muted/50"
-          :aria-expanded="isRuleExpanded(rule.id)"
-          @click="toggleRule(rule.id)"
-        >
-          <component
-            :is="isRuleExpanded(rule.id) ? ChevronDown : ChevronRight"
-            class="h-5 w-5 shrink-0 text-muted-foreground"
-            aria-hidden="true"
-          />
+          :aria-expanded="isRuleExpanded(rule.id)" @click="toggleRule(rule.id)">
+          <component :is="isRuleExpanded(rule.id) ? ChevronDown : ChevronRight"
+            class="h-5 w-5 shrink-0 text-muted-foreground" aria-hidden="true" />
           <span class="font-medium text-foreground text-left wrap-break-word min-w-0">{{ rule.name }}</span>
           <Badge variant="secondary" class="ml-auto shrink-0">
             {{ versions.length }} version{{ versions.length === 1 ? '' : 's' }}
@@ -343,11 +321,8 @@ function isSectionExpanded(sectionKey: string): boolean {
 
         <!-- Expanded: version cards -->
         <div v-if="isRuleExpanded(rule.id)" class="border-t bg-muted/20 px-3 py-4 space-y-4 sm:px-5">
-          <div
-            v-for="(version, vi) in versions"
-            :key="version.versionId ?? vi"
-            class="rounded-lg border bg-background p-4 space-y-4 sm:p-5"
-          >
+          <div v-for="(version, vi) in versions" :key="version.versionId ?? vi"
+            class="rounded-lg border bg-background p-4 space-y-4 sm:p-5">
             <!-- Version header -->
             <div class="flex flex-wrap items-center gap-x-4 gap-y-1.5">
               <span class="text-sm font-medium text-foreground">
@@ -362,123 +337,86 @@ function isSectionExpanded(sectionKey: string): boolean {
             </div>
 
             <!-- Config fields grid -->
-            <div
-              v-if="getConfigEntries(version).length > 0"
-              class="space-y-3"
-            >
+            <div v-if="getConfigEntries(version).length > 0" class="space-y-3">
               <template v-for="([key, value]) in getConfigEntries(version)" :key="key">
                 <!-- Primitive values: render inline -->
-                <div
-                  v-if="isPrimitive(value)"
-                  class="flex flex-col gap-0.5 text-sm sm:flex-row sm:gap-3"
-                >
-                  <dt class="text-muted-foreground shrink-0 sm:min-w-[140px]">{{ formatKey(key) }}:</dt>
+                <div v-if="isPrimitive(value)" class="flex flex-col gap-0.5 text-sm sm:flex-row sm:gap-3">
+                  <dt class="text-muted-foreground shrink-0 sm:min-w-35">{{ formatKey(key) }}:</dt>
                   <dd class="text-foreground wrap-break-word min-w-0">{{ formatPrimitive(value) }}</dd>
                 </div>
 
                 <!-- Object values: collapsible sub-section -->
-                <div
-                  v-else-if="isObject(value)"
-                  class="rounded-md border bg-muted/30"
-                >
-                  <button
-                    type="button"
+                <div v-else-if="isObject(value)" class="rounded-md border bg-muted/30">
+                  <button type="button"
                     class="flex w-full items-center gap-2 px-3 py-2.5 min-h-11 text-sm transition-colors hover:bg-muted/50"
-                    @click="toggleSection(`${rule.id}-${vi}-${key}`)"
-                  >
-                    <component
-                      :is="isSectionExpanded(`${rule.id}-${vi}-${key}`) ? ChevronDown : ChevronRight"
-                      class="h-4 w-4 shrink-0 text-muted-foreground"
-                      aria-hidden="true"
-                    />
-                    <span class="text-muted-foreground font-medium text-left wrap-break-word min-w-0">{{ formatKey(key) }}</span>
+                    @click="toggleSection(`${rule.id}-${vi}-${key}`)">
+                    <component :is="isSectionExpanded(`${rule.id}-${vi}-${key}`) ? ChevronDown : ChevronRight"
+                      class="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden="true" />
+                    <span class="text-muted-foreground font-medium text-left wrap-break-word min-w-0">{{ formatKey(key)
+                      }}</span>
                     <span class="ml-2 text-xs text-foreground truncate min-w-0">
                       {{ summarizeArrayItem(value) }}
                     </span>
                   </button>
-                  <div
-                    v-if="isSectionExpanded(`${rule.id}-${vi}-${key}`)"
-                    class="border-t px-3 py-3 space-y-2.5"
-                  >
-                    <template v-for="([subKey, subVal]) in Object.entries(value as Record<string, unknown>)" :key="subKey">
+                  <div v-if="isSectionExpanded(`${rule.id}-${vi}-${key}`)" class="border-t px-3 py-3 space-y-2.5">
+                    <template v-for="([subKey, subVal]) in Object.entries(value as Record<string, unknown>)"
+                      :key="subKey">
                       <div v-if="isPrimitive(subVal)" class="flex flex-col gap-0.5 text-sm sm:flex-row sm:gap-3">
-                        <dt class="text-muted-foreground shrink-0 sm:min-w-[120px]">{{ formatKey(subKey) }}:</dt>
+                        <dt class="text-muted-foreground shrink-0 sm:min-w-30">{{ formatKey(subKey) }}:</dt>
                         <dd class="text-foreground wrap-break-word min-w-0">{{ formatPrimitive(subVal) }}</dd>
                       </div>
                       <div v-else class="text-sm">
                         <span class="text-muted-foreground">{{ formatKey(subKey) }}:</span>
-                        <pre class="mt-1.5 max-h-40 overflow-auto rounded border bg-background p-2.5 font-mono text-xs leading-relaxed text-foreground">{{ JSON.stringify(subVal, null, 2) }}</pre>
+                        <pre
+                          class="mt-1.5 max-h-40 overflow-auto rounded border bg-background p-2.5 font-mono text-xs leading-relaxed text-foreground">{{ JSON.stringify(subVal, null, 2) }}</pre>
                       </div>
                     </template>
                   </div>
                 </div>
 
                 <!-- Array values: collapsible with inline name preview -->
-                <div
-                  v-else-if="isNonEmptyArray(value)"
-                  class="rounded-md border bg-muted/30"
-                >
-                  <button
-                    type="button"
+                <div v-else-if="isNonEmptyArray(value)" class="rounded-md border bg-muted/30">
+                  <button type="button"
                     class="flex w-full items-center gap-2 px-3 py-2.5 min-h-11 text-sm transition-colors hover:bg-muted/50"
-                    @click="toggleSection(`${rule.id}-${vi}-${key}`)"
-                  >
-                    <component
-                      :is="isSectionExpanded(`${rule.id}-${vi}-${key}`) ? ChevronDown : ChevronRight"
-                      class="h-4 w-4 shrink-0 text-muted-foreground"
-                      aria-hidden="true"
-                    />
+                    @click="toggleSection(`${rule.id}-${vi}-${key}`)">
+                    <component :is="isSectionExpanded(`${rule.id}-${vi}-${key}`) ? ChevronDown : ChevronRight"
+                      class="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden="true" />
                     <span class="text-muted-foreground font-medium shrink-0">{{ formatKey(key) }}</span>
                     <span class="ml-2 text-xs text-foreground truncate min-w-0">
                       {{ summarizeArrayPreview(value as unknown[]) }}
                     </span>
                   </button>
-                  <div
-                    v-if="isSectionExpanded(`${rule.id}-${vi}-${key}`)"
-                    class="border-t px-3 py-3 space-y-1"
-                  >
-                    <div
-                      v-for="(item, itemIdx) in (value as unknown[])"
-                      :key="itemIdx"
+                  <div v-if="isSectionExpanded(`${rule.id}-${vi}-${key}`)" class="border-t px-3 py-3 space-y-1">
+                    <div v-for="(item, itemIdx) in (value as unknown[])" :key="itemIdx"
                       class="flex items-center gap-2 text-xs py-0.5"
-                      :class="(item as Record<string, unknown>)?.selected === false ? 'opacity-40' : ''"
-                    >
+                      :class="(item as Record<string, unknown>)?.selected === false ? 'opacity-40' : ''">
                       <span class="text-foreground">
                         {{ summarizeArrayItem(item) || JSON.stringify(item) }}
                       </span>
-                      <span
-                        v-if="(item as Record<string, unknown>)?.selected === false"
-                        class="text-muted-foreground"
-                      >(not selected)</span>
+                      <span v-if="(item as Record<string, unknown>)?.selected === false"
+                        class="text-muted-foreground">(not
+                        selected)</span>
                     </div>
                   </div>
                 </div>
 
                 <!-- Empty array -->
-                <div
-                  v-else-if="Array.isArray(value) && value.length === 0"
-                  class="flex flex-col gap-0.5 text-sm sm:flex-row sm:gap-3"
-                >
-                  <dt class="text-muted-foreground shrink-0 sm:min-w-[140px]">{{ formatKey(key) }}:</dt>
+                <div v-else-if="Array.isArray(value) && value.length === 0"
+                  class="flex flex-col gap-0.5 text-sm sm:flex-row sm:gap-3">
+                  <dt class="text-muted-foreground shrink-0 sm:min-w-35">{{ formatKey(key) }}:</dt>
                   <dd class="text-muted-foreground italic">Empty</dd>
                 </div>
               </template>
             </div>
 
             <!-- No config fields -->
-            <p
-              v-else
-              class="text-xs text-muted-foreground italic"
-            >
+            <p v-else class="text-xs text-muted-foreground italic">
               No additional configuration for this version.
             </p>
           </div>
 
           <!-- No versions fallback -->
-          <p
-            v-if="getVersions(rule).length === 0"
-            class="text-xs text-muted-foreground italic"
-          >
+          <p v-if="getVersions(rule).length === 0" class="text-xs text-muted-foreground italic">
             No versions found for this rule.
           </p>
         </div>
