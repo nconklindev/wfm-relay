@@ -122,7 +122,7 @@ async function executeRequest() {
       body = Object.keys(customData.value).length ? customData.value : undefined
     }
     else {
-      body = buildGenericBody() ?? props.endpoint.defaultBody
+      body = (props.endpoint.buildBody?.(formData.value) ?? buildGenericBody()) ?? props.endpoint.defaultBody
     }
     response.value = await call(props.endpoint.id as WfmEndpointId, body)
 

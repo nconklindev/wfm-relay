@@ -36,6 +36,12 @@ export interface WfmEndpointDef {
    * Lets POST endpoints work out-of-the-box without exposing JSON to the user.
    */
   defaultBody?: unknown
+  /**
+   * Transforms declarative input field values into the correct request body shape.
+   * Use when the API expects a nested structure that buildGenericBody() can't produce.
+   * Falls back to defaultBody when the returned value is undefined.
+   */
+  buildBody?: (formData: Record<string, string>) => unknown
 }
 
 /**
@@ -49,6 +55,29 @@ export interface WfmEndpointDef {
  */
 export const ENDPOINT_DEFS = [
   // ── Common Resources ──────────────────────────────────────────────
+  {
+    id: 'employee-groups',
+    label: 'Employee Groups',
+    method: 'GET',
+    path: 'api/v1/commons/employee_groups',
+    description:
+      'Retrieve a list of all Employee Groups or returns a single Employee Group by Name',
+    category: 'Common Resources',
+    notes: [
+      'Retrieves all Employee Groups available in the system or a single Employee Group when filtered by Name.',
+    ],
+    defaultBody: { all_details: true },
+    inputs: [
+      {
+        name: 'name',
+        type: 'text',
+        label: 'Employee Group Name',
+        placeholder: 'Full-Time Employees',
+        description:
+          'Name of the Employee Group to retrieve. Leave empty to retrieve all Employee Groups.',
+      },
+    ],
+  },
   {
     id: 'locations',
     label: 'Locations',
@@ -76,18 +105,6 @@ export const ENDPOINT_DEFS = [
         label: 'Date',
         description: 'The effective date to search from.',
       },
-    ],
-  },
-  {
-    id: 'multi-read',
-    label: 'Multi-Read',
-    method: 'POST',
-    path: 'api/v1/commons/multi_read',
-    description: 'Batch multiple API requests into a single call.',
-    category: 'Common Resources',
-    notes: [
-      'Combines multiple API calls into a single request to reduce round-trips.',
-      'The request body should contain an array of individual API request objects.',
     ],
   },
   {
@@ -203,7 +220,20 @@ export const ENDPOINT_DEFS = [
       "Uses the API user's access rights.",
       'Review the table for at-a-glance information or the raw JSON for additional details.',
     ],
-    defaultBody: { where: { accrualPolicies: { refs: [] } } },
+    defaultBody: { where: { accuralPolicies: { qualifiers: ['ACCRUAL POLICY NAME'] } } }, // This is mistyped in the docs and doesn't work if spelled "accrualPolicies"
+    inputs: [
+      {
+        name: 'qualifier',
+        type: 'text',
+        label: 'Accrual Policy Name',
+        placeholder: 'Vacation',
+        description: 'Name of the Accrual Policy to retrieve. Must provide a value.',
+      },
+    ],
+    buildBody: (formData) =>
+      formData.qualifier
+        ? { where: { accuralPolicies: { qualifiers: [formData.qualifier] } } }
+        : undefined,
   },
   {
     id: 'pay-codes',
