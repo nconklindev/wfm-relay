@@ -37,7 +37,7 @@ useSeoMeta({
         <p>
           Authenticate once, select an endpoint, execute the request, and inspect the results
           in a structured table or as raw JSON. It was built to save time for anyone who regularly
-          works with WFM data: administrators, implementers, support engineers, and developers.
+          works with WFM data.
         </p>
       </CardContent>
     </Card>

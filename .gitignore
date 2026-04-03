@@ -28,3 +28,6 @@ logs
 
 # AI
 .claude
+
+# Dev Documentation
+ENDPOINTS.md
