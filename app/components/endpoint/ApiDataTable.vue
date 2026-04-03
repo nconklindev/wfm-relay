@@ -117,9 +117,19 @@ const pageSizeOptions = [25, 50, 100]
 
 const rows = computed(() => extractRows(props.response))
 const columns = computed(() => {
-  const first = rows.value?.[0]
-  if (!first) return []
-  return Object.keys(first)
+  if (!rows.value?.length) return []
+  // Seed column order from the densest row (most likely to be complete),
+  // then add any keys seen elsewhere that it was missing.
+  const densest = rows.value.reduce((best, row) =>
+    Object.keys(row).length > Object.keys(best).length ? row : best,
+  rows.value[0]!)
+  const keySet = new Set(Object.keys(densest))
+  for (const row of rows.value) {
+    for (const key of Object.keys(row)) {
+      keySet.add(key)
+    }
+  }
+  return [...keySet]
 })
 
 const filtered = computed(() => {
