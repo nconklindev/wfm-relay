@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Alert } from '@/components/ui/alert'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   KeyRound,
@@ -39,53 +40,21 @@ useSeoMeta({
       <CardContent class="space-y-4 text-sm">
         <p>
           Before you can use WFM Relay, you need a set of API credentials for your WFM
-          environment. These are separate from your regular WFM login. Admins can set up a new Client under <strong
-            class="font-medium">Administration → Application Setup →
+          environment. Admins can set up a new Client under <strong class="font-medium">Administration → Application
+            Setup →
             Common Setup → Client Management</strong>.
         </p>
 
-        <div class="space-y-3">
-          <div class="rounded-md border bg-muted/30 p-3 space-y-1">
-            <p class="font-medium">Environment URL (Hostname)</p>
-            <p class="text-muted-foreground">
-              The full URL of your WFM environment — the same address you type into your browser
-              to log into WFM. For example: <code class="font-mono text-xs">https://yourcompany.mykronos.com</code>
-            </p>
-          </div>
-
-          <div class="rounded-md border bg-muted/30 p-3 space-y-1">
-            <p class="font-medium">Client ID</p>
-            <p class="text-muted-foreground">
-              A unique identifier for the API client configured in WFM. Found in the OAuth client
-              details in Developer Tools.
-            </p>
-          </div>
-
-          <div class="rounded-md border bg-muted/30 p-3 space-y-1">
-            <p class="font-medium">Client Secret</p>
-            <p class="text-muted-foreground">
-              The password for the API client. Treat this like a password — do not share it.
-              It is only shown once when the OAuth client is created.
-            </p>
-          </div>
-
-          <div class="rounded-md border bg-muted/30 p-3 space-y-1">
-            <p class="font-medium">Org Realm ID</p>
-            <p class="text-muted-foreground">
-              The identifier for your WFM tenant. This is typically visible in the OAuth client
-              configuration or can be obtained from your WFM administrator.
-            </p>
-          </div>
-
-          <div class="rounded-md border bg-muted/30 p-3 space-y-1">
-            <p class="font-medium">Username &amp; Password <span class="font-normal text-muted-foreground">(Interactive
-                flow only)</span></p>
-            <p class="text-muted-foreground">
-              Your personal WFM login credentials. Only required if you choose the
-              Interactive authentication flow (see Step 2).
-            </p>
-          </div>
-        </div>
+        <p class="text-muted-foreground">
+          You will need your <strong class="font-medium text-foreground">Environment URL</strong>,
+          <strong class="font-medium text-foreground">Client ID</strong>,
+          <strong class="font-medium text-foreground">Client Secret</strong>, and either the
+          <strong class="font-medium text-foreground">Org ID</strong> (Non-Interactive) or
+          <strong class="font-medium text-foreground">Realm ID</strong> (Interactive). If you are
+          using the Interactive flow, you will also need the WFM
+          <strong class="font-medium text-foreground">Username</strong> and
+          <strong class="font-medium text-foreground">Password</strong> that was used to create the API client.
+        </p>
       </CardContent>
     </Card>
 
@@ -104,7 +73,7 @@ useSeoMeta({
         </p>
 
         <div class="space-y-3">
-          <div class="rounded-md border bg-muted/30 p-3 space-y-1.5">
+          <div class="rounded-md border bg-muted/30 p-3 space-y-2">
             <p class="font-medium">Interactive <span class="text-muted-foreground font-normal">(recommended for most
                 users)</span></p>
             <p class="text-muted-foreground">
@@ -118,7 +87,7 @@ useSeoMeta({
             </p>
           </div>
 
-          <div class="rounded-md border bg-muted/30 p-3 space-y-1.5">
+          <div class="rounded-md border bg-muted/30 p-3 space-y-2">
             <p class="font-medium">Non-Interactive <span class="text-muted-foreground font-normal">(service
                 account)</span></p>
             <p class="text-muted-foreground">
@@ -126,11 +95,16 @@ useSeoMeta({
               password. This requires a dedicated API service account to be configured in WFM with
               the appropriate access control points granted.
             </p>
+
             <p class="text-muted-foreground">
               <strong class="font-medium text-foreground">Use this if</strong> your administrator
               has set up a service account specifically for API access, or if you need to retrieve
               data beyond your personal access level.
             </p>
+            <Alert variant="warning" class="mt-2">
+              Requests made via the Non-Interactive flow run as a system level user, not a named
+              account. As a result, some endpoints may return less data than expected or no data at all.
+            </Alert>
           </div>
         </div>
       </CardContent>
@@ -252,7 +226,7 @@ useSeoMeta({
           <p class="text-muted-foreground">
             Your account (or service account) may not have the required access control point
             granted in WFM. Each endpoint's documentation panel lists the relevant access
-            control point. Contact your WFM administrator to have it granted.
+            control point. Contact your company's WFM administrator to have it granted.
           </p>
         </div>
 
