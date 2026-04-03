@@ -10,6 +10,7 @@ import LaborCategorySelect from './inputs/LaborCategorySelect.vue'
 import AdjustmentRulesResult from './results/AdjustmentRules.vue'
 import CombinationRulesResult from './results/CombinationRules.vue'
 import EmploymentTermsResult from './results/EmploymentTerms.vue'
+import PaycodeDistributionsResult from './results/PaycodeDistributions.vue'
 import PayRulesResult from './results/PayRules.vue'
 
 const props = defineProps<{
@@ -37,6 +38,7 @@ const CUSTOM_RESULT_REGISTRY: Partial<Record<WfmEndpointId, Component>> = {
   'adjustment-rules': AdjustmentRulesResult,
   'combination-rules': CombinationRulesResult,
   'employment-terms': EmploymentTermsResult,
+  'paycode-distributions': PaycodeDistributionsResult,
   'pay-rules': PayRulesResult,
 }
 

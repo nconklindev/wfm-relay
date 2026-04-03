@@ -164,4 +164,34 @@ export const TIMEKEEPING_SETUP_ENDPOINTS: WfmEndpointDef[] = [
     category: 'Timekeeping Setup',
     notes: ['The associated Access Control Point is EMPLOYMENT_TERMS_SETUP.'],
   },
+  {
+    id: 'paycode-distributions',
+    label: 'Paycode Distributions',
+    method: 'GET',
+    path: 'api/v1/timekeeping/setup/pay_code_distributions',
+    description: 'Retrieve a list of all paycode distributions, or a single distribution by name.',
+    category: 'Timekeeping Setup',
+    inputs: [
+      {
+        name: 'name',
+        type: 'text',
+        label: 'Paycode Distribution Name',
+        placeholder: 'Hourly Employee',
+        description: 'The name of the paycode distribution to retrieve. Optional.',
+      },
+    ],
+    notes: ['The associated Access Control Point is PAY_RULE'],
+    buildBody: (formData) => (formData.name ? { where: { name: formData.name } } : undefined),
+  },
+  {
+    id: 'punch-interpretation-rules',
+    label: 'Punch Interpretation Rules',
+    method: 'GET',
+    path: 'api/v1/timekeeping/setup/punch_interpretation_rules',
+    description:
+      'Retrieve a list containing the ID, name and other details of all punch interpretation rules in the system.',
+    category: 'Timekeeping Setup',
+    notes: ["This list is not filtered by the calling user's GDAP."],
+    buildBody: () => ({ all_details: true }),
+  },
 ]
