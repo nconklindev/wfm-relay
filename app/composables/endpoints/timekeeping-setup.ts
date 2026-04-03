@@ -155,4 +155,13 @@ export const TIMEKEEPING_SETUP_ENDPOINTS: WfmEndpointDef[] = [
     category: 'Timekeeping Setup',
     notes: ['The associated Access Control Point is PAYCODE.'],
   },
+  {
+    id: 'employment-terms',
+    label: 'Employment Terms',
+    method: 'GET',
+    path: 'api/v2/timekeeping/setup/employment_terms',
+    description: 'Retrieve all employment term definitions.',
+    category: 'Timekeeping Setup',
+    notes: ['The associated Access Control Point is EMPLOYMENT_TERMS_SETUP.'],
+  },
 ]

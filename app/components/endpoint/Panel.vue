@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label'
 import LaborCategorySelect from './inputs/LaborCategorySelect.vue'
 import AdjustmentRulesResult from './results/AdjustmentRules.vue'
 import CombinationRulesResult from './results/CombinationRules.vue'
+import EmploymentTermsResult from './results/EmploymentTerms.vue'
 import PayRulesResult from './results/PayRules.vue'
 
 const props = defineProps<{
@@ -35,6 +36,7 @@ const CUSTOM_INPUT_REGISTRY: Partial<Record<WfmEndpointId, Component>> = {
 const CUSTOM_RESULT_REGISTRY: Partial<Record<WfmEndpointId, Component>> = {
   'adjustment-rules': AdjustmentRulesResult,
   'combination-rules': CombinationRulesResult,
+  'employment-terms': EmploymentTermsResult,
   'pay-rules': PayRulesResult,
 }
 
