@@ -20,7 +20,7 @@
     "nuxt": "^4.6.2",
     "nuxt-security": "^2.6.0",
     "reka-ui": "^2.11.0",
-    "shadcn-nuxt": "^2.8.2",
+    "shadcn-nuxt": "^2.9.0",
     "tailwind-merge": "^3.7.0",
     "vue": "^3.5.44",
     "vue-router": "^4.6.4"
