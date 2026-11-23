@@ -22,8 +22,8 @@
     "reka-ui": "^2.11.0",
     "shadcn-nuxt": "^2.9.0",
     "tailwind-merge": "^3.7.0",
-    "vue": "^3.5.45",
-    "vue-router": "^4.6.4"
+    "vue": "^3.5.46",
+    "vue-router": "^4.6.5"
   },
   "devDependencies": {
     "@nuxt/eslint": "^1.17.0",
